@@ -1,6 +1,6 @@
 package com.example.mentalight;
 
-//Klasse für einen Reward Screen
+//Klasse für einen Reward (Belohnung)
 public class Reward {
 
     private String title;
@@ -9,7 +9,7 @@ public class Reward {
     private Badge badge;
 
 
-    //Konstruktor für Reward Screen mit Badge
+    //Konstruktor für Reward mit Badge
     public Reward(String title, String subtitle, String text, Badge badge) {
         this.title = title;
         this.subtitle = subtitle;
@@ -17,7 +17,7 @@ public class Reward {
         this.badge = badge;
     }
 
-    //Konstruktor für Reward Screen ohne Badge
+    //Konstruktor für Reward ohne Badge
     public Reward(String title, String subtitle, String text) {
         this.title = title;
         this.subtitle = subtitle;

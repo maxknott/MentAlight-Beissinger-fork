@@ -5,4 +5,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start">Start</string>
     <string name="overview_intro_text">Die Auswertung deines Anfangsscreenings hat ergeben, dass folgende Fragebögen für dich relevant sind</string>
+
+    <!-- by Max: -->
+    <string name="progress_button_text">Mein Fortschritt</string>
+    <string name="reward_title_text">Geschafft!</string>
+    <string name="reward_text_text">Du hast den Fragebogen erfolgreich abgeschlossen.</string>
 </resources>

@@ -22,6 +22,7 @@ import com.example.mentalight.fragments.FreeTextFragment;
 import com.example.mentalight.fragments.IntroFragment;
 import com.example.mentalight.fragments.LikertFragment;
 import com.example.mentalight.fragments.OverviewFragment;
+import com.example.mentalight.fragments.RewardFragment;
 import com.example.mentalight.fragments.SingleChoiceFragment;
 
 import org.json.JSONException;
@@ -503,4 +504,28 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         currentFrag = 0;
         initOverview(relevantQuestionnairesTitles);
     }
+
+
+
+    //
+    // by Max:
+    //
+
+
+
+    //TODO: not working yet
+    private void showRewardScreen(Reward rewardScreen) {
+        RewardFragment fragment = new RewardFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", rewardScreen.getTitle());
+        bundle.putString("text", rewardScreen.getText());
+        fragment.setArguments(bundle);
+
+        //TODO: FragmentManager only available in Activities or Fragment --> might need to put in MainActivity
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.intro_container, fragment)
+                .commit();
+    }
+
 }
