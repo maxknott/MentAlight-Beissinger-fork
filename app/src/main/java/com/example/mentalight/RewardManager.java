@@ -1,10 +1,6 @@
 package com.example.mentalight;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.FragmentManager;
-
-import com.example.mentalight.fragments.IntroFragment;
+import com.example.mentalight.fragments.BadgeFragment;
 import com.example.mentalight.fragments.RewardFragment;
 
 public class RewardManager {
@@ -12,66 +8,99 @@ public class RewardManager {
     private Reward reward;
     private Reward rewardScreen;
     private Badge badge;
-
-    private String title;
-    private String subtitle;
-    private String text;
+    private RewardFragment rewardFragment;
+    private BadgeFragment badgeFragment;
 
     private boolean hasBadge;
 
-    public RewardManager() {
+
+    public RewardManager(boolean hasBadge) {
+        this.hasBadge = hasBadge;
         init();
     }
 
     private void init() {
-        //TODO: string constants for title, subtitle, text
-        //title =
-        //subtitle =
-        //text =
         makeRewardScreen();
+        //makeRewardFragment();
     }
 
     private void makeRewardScreen() {
-        //TODO: condition for reward with or without badge
-        if(hasBadge){
+        if(hasBadge) {
             rewardScreen = rewardWithBadge();
         } else {
             rewardScreen = rewardWithoutBadge();
         }
     }
 
-    private void showRewardScreen() {
-        makeRewardScreen();
+    private void makeRewardFragment() {
+        if (rewardScreen != null) {
+            rewardFragment = new RewardFragment();
 
+            /*
+            Bundle bundle = new Bundle();
+            bundle.putString("title", rewardScreen.getTitle());
+            bundle.putString("subtitle", rewardScreen.getSubtitle());
+            bundle.putString("text", rewardScreen.getText());
+            fragment.setArguments(bundle);
+             */
 
-        //TODO: might move this to MainActivity
-        RewardFragment fragment = new RewardFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("title", rewardScreen.getTitle());
-        bundle.putString("text", rewardScreen.getText());
-        fragment.setArguments(bundle);
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " must initiate Reward rewardScreen before creating a fragment");
+        }
+    }
 
-        //TODO: FragmentManager only available in Activities or Fragment --> might need to put in MainActivity
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        //getSupportFragmentManager().beginTransaction()
-        //        .replace(R.id.intro_container, fragment)
-        //        .commit();
+    private void makeBadge() {
+        badge = new Badge();
+        badgeFragment = new BadgeFragment();
     }
 
     private Reward rewardWithBadge() {
-        reward = new Reward(title, subtitle, text, badge);
-        return reward;
+        if(badge != null) {
+            reward = new Reward(badge);
+            return reward;
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " must initiate Badge badge before creating a Reward");
+        }
+
     }
 
     private Reward rewardWithoutBadge() {
-        reward = new Reward(title, subtitle, text);
+        reward = new Reward();
         return reward;
     }
 
 
-    //returns complete reward screen
+
+    //returns complete reward screen as Reward-object
     public Reward getRewardScreen() {
-        return rewardScreen;
+        if (rewardScreen != null) {
+            return rewardScreen;
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " has not initiated rewardScreen");
+        }
+    }
+
+    //returns fragment with arguments as RewardFragment-object
+    public RewardFragment getRewardFragment() {
+        if (rewardFragment != null) {
+            return rewardFragment;
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " has not initiated rewardFragment");
+        }
+    }
+
+    //returns fragment with arguments as RewardFragment-object
+    public BadgeFragment getBadgeFragment() {
+        if (badgeFragment != null) {
+            return badgeFragment;
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " has not initiated badgeFragment");
+        }
     }
 
 }

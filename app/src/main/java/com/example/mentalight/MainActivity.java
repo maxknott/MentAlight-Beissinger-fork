@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.mentalight.fragments.BadgeFragment;
 import com.example.mentalight.fragments.CheckboxFragment;
 import com.example.mentalight.fragments.ChipsFragment;
 import com.example.mentalight.fragments.FreeTextFragment;
@@ -57,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private Subsection[] subsections;
     private HashMap<String, String> savedResults = new HashMap<>();
 
+
+    //by Max:
+    private RewardManager rewardManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +88,20 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         boolean isScreeningFinished = sharedPreferences.getBoolean("screeningFinished", false);
 
         if (!isScreeningFinished) {
-            displayScreening();
+
+
+            //put function here to test on startup TODO: remove later
+
+
+
+            makeReward();
+
+
+
+
+            //displayScreening();
+
+
         } else {
             // Überprüfen, ob relevante Fragebögen vorhanden sind
             sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -507,25 +526,69 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
 
 
+
+
     //
     // by Max:
     //
 
-
+    private void makeReward() {
+        rewardManager = rewardManagerWithoutBadge();
+        showRewardScreen(rewardManager);
+    }
 
     //TODO: not working yet
-    private void showRewardScreen(Reward rewardScreen) {
-        RewardFragment fragment = new RewardFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("title", rewardScreen.getTitle());
-        bundle.putString("text", rewardScreen.getText());
-        fragment.setArguments(bundle);
+    private void showRewardScreen(RewardManager rewardManager) {
+        //RewardFragment rewardFragment = getRewardFragment(rewardManager);
+        RewardFragment rewardFragment = new RewardFragment();
 
-        //TODO: FragmentManager only available in Activities or Fragment --> might need to put in MainActivity
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "testTitle");
+        bundle.putString("intro", "testIntro");
+        rewardFragment.setArguments(bundle);
+
+        //FragmentManager only available in Activities or Fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.intro_container, fragment)
+                .replace(R.id.intro_container, rewardFragment)
                 .commit();
+        System.out.println("rewardFragment created and shown");
     }
+
+    private void showBadge(RewardManager rewardManager) {
+        BadgeFragment badgeFragment = getBadgeFragment(rewardManager);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.badge_container, badgeFragment)
+                .commit();
+        System.out.println("badgeFragment created and shown");
+    }
+
+    //returns new RewardManager-object with badge
+    private RewardManager rewardManagerWithBadge() {
+        return new RewardManager(true);
+    }
+
+    //returns new RewardManager-object without badge
+    private RewardManager rewardManagerWithoutBadge() {
+        return new RewardManager(false);
+    }
+
+    //returns complete reward screen as Reward-object
+    private Reward getRewardScreen(RewardManager rewardManager) {
+        return rewardManager.getRewardScreen();
+    }
+
+    //returns fragment with arguments as RewardFragment-object
+    private RewardFragment getRewardFragment(RewardManager rewardManager) {
+        return rewardManager.getRewardFragment();
+    }
+
+    //returns fragment with arguments as BadgeFragment-object
+    private BadgeFragment getBadgeFragment(RewardManager rewardManager) {
+        return rewardManager.getBadgeFragment();
+    }
+
 
 }

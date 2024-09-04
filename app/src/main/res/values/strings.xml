@@ -7,7 +7,13 @@
     <string name="overview_intro_text">Die Auswertung deines Anfangsscreenings hat ergeben, dass folgende Fragebögen für dich relevant sind</string>
 
     <!-- by Max: -->
-    <string name="progress_button_text">Mein Fortschritt</string>
-    <string name="reward_title_text">Geschafft!</string>
-    <string name="reward_text_text">Du hast den Fragebogen erfolgreich abgeschlossen.</string>
+    <string name="progress_button_text">Fortschritt anzeigen</string>
+    <string name="reward_title_text">Geschafft</string>
+    <string name="reward_text_text">Du hast den Fragebogen erfolgreich abgeschlossen. Bleib dran!</string>
+    <string name="reward_subtitle_text">Glückwunsch!</string>
+    <string name="badge_title_text">Du hast dir eine Medaille verdient:</string>
+    <string name="badge_name1">Bronze Medaille</string>
+    <string name="badge_name2">Silber Medaille</string>
+    <string name="badge_name3">Gold Medaille</string>
+
 </resources>
