@@ -31,7 +31,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements OnStartButtonClickListener, OnQuestionnaireClickedListener{
+public class MainActivity extends AppCompatActivity implements OnStartButtonClickListener, OnQuestionnaireClickedListener, OnProgressButtonClickedListener {
+
     private Questionnaire questionnaire, rosenbergSelfEsteem, dassQuestionnaire, sek27, wirf, questionnaireZTPB, emotionsanalyse;
     private final QuestionnaireManager manager = new QuestionnaireManager();
     private ArrayList<Questionnaire> relevantQuestionnaires = new ArrayList<>();
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
 
     //by Max:
+    private boolean hasBadge;
     private RewardManager rewardManager;
 
 
@@ -93,12 +95,12 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             //put function here to test on startup TODO: remove later
 
 
-
+            hasBadge = true;
             makeReward();
 
 
 
-
+            //TODO: uncomment later
             //displayScreening();
 
 
@@ -277,6 +279,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     // Fortsetzungsbutton wurde geklickt
     private void continueButtonClicked() {
 
+        //TODO: if lastQuestionReached: makeReward();
+        // add functionality to show different medals for different states
         if(lastQuestionReached){
             currentQuestion = 1;
             lastQuestionReached = false;
@@ -308,6 +312,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                     editor.putString("questionnaireTitle_" + i, relevantQuestionnairesTitles[i]);
                 }
                 editor.apply();
+
+                //TODO: if (isScreeningFinished == false): makeReward() with bronze medal (first medal/badge)
 
                 initOverview(relevantQuestionnairesTitles);
             }
@@ -533,28 +539,63 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     //
 
     private void makeReward() {
-        rewardManager = rewardManagerWithoutBadge();
-        showRewardScreen(rewardManager);
+
+        if (hasBadge) {
+            rewardManager = rewardManagerWithBadge();
+            showRewardScreen(rewardManager);
+            showBadge(rewardManager);
+        } else {
+            rewardManager = rewardManagerWithoutBadge();
+            showRewardScreen(rewardManager);
+        }
+
     }
 
-    //TODO: not working yet
+    //TODO: hide back_button and progress_bar
     private void showRewardScreen(RewardManager rewardManager) {
-        //RewardFragment rewardFragment = getRewardFragment(rewardManager);
-        RewardFragment rewardFragment = new RewardFragment();
 
-        Bundle bundle = new Bundle();
-        bundle.putString("title", "testTitle");
-        bundle.putString("intro", "testIntro");
-        rewardFragment.setArguments(bundle);
+        RewardFragment rewardFragment = getRewardFragment(rewardManager);
+        //RewardFragment rewardFragment = new RewardFragment();
 
-        //FragmentManager only available in Activities or Fragments
+        //TODO: try newInstance(String s, String ss) ----- (or not?)
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.intro_container, rewardFragment)
                 .commit();
         System.out.println("rewardFragment created and shown");
+
+        /*
+        //if statement replaced by
+        //FragmentManager only available in Activities or Fragments
+        if(hasBadge) {
+
+            BadgeFragment badgeFragment = getBadgeFragment(rewardManager);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.intro_container, rewardFragment)
+                    .commit();
+            System.out.println("rewardFragment created and shown");
+
+
+            //show badgeFragment
+            fragmentManager.beginTransaction()
+                    .replace(R.id.badge_container, badgeFragment)
+                    .commit();
+            System.out.println("badgeFragment created and shown");
+        } else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.intro_container, rewardFragment)
+                    .commit();
+            System.out.println("rewardFragment created and shown");
+        }
+         */
+
     }
 
+    //TODO: add functionality for showing different badges/medals for different states
     private void showBadge(RewardManager rewardManager) {
         BadgeFragment badgeFragment = getBadgeFragment(rewardManager);
 
@@ -588,6 +629,32 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     //returns fragment with arguments as BadgeFragment-object
     private BadgeFragment getBadgeFragment(RewardManager rewardManager) {
         return rewardManager.getBadgeFragment();
+    }
+
+    //called when progress-button on rewardFragment is clicked
+    @Override
+    public void onProgressButtonClicked() {
+        System.out.println("onProgressButtonClicked from MainActivity called");
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
+
+        // hide rewardFragment (and badgeFragment) by removing intro_container
+        if (fragment != null) {
+            transaction.remove(fragment).commit();
+            System.out.println("intro_container View removed");
+        }
+        /*
+        if(questionnaire.getSections() != null && !firstSectionIntroAlreadyShown){
+            Section[] sections = questionnaire.getSections();
+            showIntroSection(sections[0]);
+            firstSectionIntroAlreadyShown = true;
+        }
+         */
+
+        //TODO: just for testing. change later
+        displayScreening();
     }
 
 

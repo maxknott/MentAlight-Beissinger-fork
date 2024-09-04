@@ -21,19 +21,27 @@ public class RewardManager {
 
     private void init() {
         makeRewardScreen();
-        //makeRewardFragment();
     }
 
     private void makeRewardScreen() {
         if(hasBadge) {
+            System.out.println("RewardManager: Reward + Badge objects created");
+            makeBadge();
             rewardScreen = rewardWithBadge();
+            makeRewardFragment();
+            makeBadgeFragment();
         } else {
+            System.out.println("RewardManager: Reward object created (no Badge)");
             rewardScreen = rewardWithoutBadge();
+            makeRewardFragment();
         }
     }
 
     private void makeRewardFragment() {
         if (rewardScreen != null) {
+
+            System.out.println("RewardManager: rewardFragment created");
+
             rewardFragment = new RewardFragment();
 
             /*
@@ -52,7 +60,16 @@ public class RewardManager {
 
     private void makeBadge() {
         badge = new Badge();
-        badgeFragment = new BadgeFragment();
+    }
+
+    private void makeBadgeFragment() {
+        if (rewardScreen != null) {
+            System.out.println("RewardManager: badgeFragment created");
+            badgeFragment = new BadgeFragment();
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " must initiate Reward rewardScreen before creating a fragment");
+        }
     }
 
     private Reward rewardWithBadge() {
@@ -61,7 +78,7 @@ public class RewardManager {
             return reward;
         } else {
             throw new RuntimeException(this.toString()
-                    + " must initiate Badge badge before creating a Reward");
+                    + " must initiate Badge badge before creating a Reward with Badge");
         }
 
     }
@@ -72,6 +89,7 @@ public class RewardManager {
     }
 
 
+    //Getters:
 
     //returns complete reward screen as Reward-object
     public Reward getRewardScreen() {

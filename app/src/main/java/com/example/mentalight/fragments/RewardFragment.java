@@ -58,6 +58,17 @@ public class RewardFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnProgressButtonClickedListener) {
+            listener = (OnProgressButtonClickedListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnProgressButtonClickedListener");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reward, container, false);
@@ -68,20 +79,24 @@ public class RewardFragment extends Fragment {
         textView = view.findViewById(R.id.reward_text);
          */
 
+        /*
         Bundle bundle = getArguments();
         if (bundle != null) {
             String titleText = bundle.getString("title", "");
             String introText = bundle.getString("intro", "");
-            /*
+
             //String textText = bundle.getString("text", "");
             titleView.setText(titleText);
             subtitleView.setText(introText);
             //textView.setText(textText);
-             */
+
         }
 
+         */
 
-        //TODO: view.findViewById(R.id.badge_container)
+
+
+        //TODO: view.findViewById(R.id.badge_container) ---- maybe moved to MainActivity
 
 
         Button progressButton = view.findViewById(R.id.progress_button);
@@ -89,21 +104,13 @@ public class RewardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 listener.onProgressButtonClicked();
+                System.out.println("progress_button OnClick-function from RewardFragment called");
             }
         });
 
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnProgressButtonClickedListener) {
-            listener = (OnProgressButtonClickedListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnProgressButtonClickedListener");
-        }
-    }
+
 
 }
