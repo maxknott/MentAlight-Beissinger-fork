@@ -12,8 +12,11 @@
     <string name="reward_text_text">Du hast den Fragebogen erfolgreich abgeschlossen. Bleib dran!</string>
     <string name="reward_subtitle_text">Glückwunsch!</string>
     <string name="badge_title_text">Du hast dir eine Medaille verdient:</string>
-    <string name="badge_name1">Bronze Medaille</string>
-    <string name="badge_name2">Silber Medaille</string>
-    <string name="badge_name3">Gold Medaille</string>
+    <string name="badge_name_bronze">Bronze Medaille</string>
+    <string name="badge_name_silver">Silber Medaille</string>
+    <string name="badge_name_gold">Gold Medaille</string>
+    <string name="badge_type_bronze">bronze</string>
+    <string name="badge_type_silver">silver</string>
+    <string name="badge_type_gold">gold</string>
 
 </resources>

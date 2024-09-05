@@ -2,9 +2,16 @@ package com.example.mentalight;
 
 public class Badge {
 
-    private String badgeType;
+    private int badgeType;
 
-    public Badge() {
+
+    public Badge(int badgeType) {
+        this.badgeType = badgeType;
 
     }
+
+    public int getBadgeType() {
+        return badgeType;
+    }
+
 }

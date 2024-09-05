@@ -566,7 +566,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("rewardFragment created and shown");
 
         /*
-        //if statement replaced by
+        //if statement replaced
         //FragmentManager only available in Activities or Fragments
         if(hasBadge) {
 

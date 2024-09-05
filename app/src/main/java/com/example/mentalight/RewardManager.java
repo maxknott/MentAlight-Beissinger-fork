@@ -13,20 +13,49 @@ public class RewardManager {
 
     private boolean hasBadge;
 
+    private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
+    private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
+    private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
+
+    //public enum BadgeType {BADGE_TYPE_BRONZE, BADGE_TYPE_SILVER, BADGE_TYPE_GOLD}
+
+    private int badgeType;
+
 
     public RewardManager(boolean hasBadge) {
         this.hasBadge = hasBadge;
         init();
     }
 
+    public RewardManager(boolean hasBadge, int badgeType) {
+        this.hasBadge = hasBadge;
+        this.badgeType = badgeType;
+
+    }
+
     private void init() {
         makeRewardScreen();
     }
 
+    private void makeRewardScreenWithBadge(int badgeType) {
+
+    }
+
+    private void makeRewardScreenWithoutBadge() {
+
+    }
+
     private void makeRewardScreen() {
         if(hasBadge) {
+
             System.out.println("RewardManager: Reward + Badge objects created");
-            makeBadge();
+
+            //TODO: makeBadge with int badgeType argument
+
+            badge = badgeBronze();
+
+            //makeBadge();
+
             rewardScreen = rewardWithBadge();
             makeRewardFragment();
             makeBadgeFragment();
@@ -58,8 +87,34 @@ public class RewardManager {
         }
     }
 
-    private void makeBadge() {
-        badge = new Badge();
+    //TODO: move switch to BadgeFragment
+    private void makeBadge(int badgeType) {
+
+
+        /* TODO: switch does not work even with enum
+        switch (badgeType) {
+            case BADGE_TYPE_BRONZE:
+                badge = new Badge(BADGE_TYPE_BRONZE);
+                break;
+            case BADGE_TYPE_SILVER:
+                badge = new Badge(BADGE_TYPE_SILVER);
+                break;
+            case BADGE_TYPE_GOLD:
+                badge = new Badge(BADGE_TYPE_GOLD);
+                break;
+            default:
+                System.out.println("badgeType not accepted");
+                throw new RuntimeException(this.toString()
+                        + " not a valid input");
+        }
+
+         */
+
+
+        //badge = new Badge(badgeType);
+
+        //badge = badgeBronze();
+
     }
 
     private void makeBadgeFragment() {
@@ -86,6 +141,19 @@ public class RewardManager {
     private Reward rewardWithoutBadge() {
         reward = new Reward();
         return reward;
+    }
+
+    private Badge badgeBronze() {
+        badge = new Badge(BADGE_TYPE_BRONZE);
+        return badge;
+    }
+    private Badge badgeSilver() {
+        badge = new Badge(BADGE_TYPE_SILVER);
+        return badge;
+    }
+    private Badge badgeGold() {
+        badge = new Badge(BADGE_TYPE_GOLD);
+        return badge;
     }
 
 

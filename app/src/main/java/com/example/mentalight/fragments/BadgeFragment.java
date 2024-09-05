@@ -1,5 +1,6 @@
 package com.example.mentalight.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,7 +8,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.mentalight.BadgeType;
 import com.example.mentalight.R;
 
 /**
@@ -17,33 +21,34 @@ import com.example.mentalight.R;
  */
 public class BadgeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String BADGE_TYPE = "badge_type";
+    /*
+    private static final String BADGE_TYPE_BRONZE = "bronze";
+    private static final String BADGE_TYPE_SILVER = "silver";
+    private static final String BADGE_TYPE_GOLD = "gold";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+     */
+    private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
+    private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
+    private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
+
+    private int badgeType;
+
+    private View view;
+    private ImageView imgView;
+    private TextView txtView;
 
     public BadgeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BadgeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BadgeFragment newInstance(String param1, String param2) {
+
+    public static BadgeFragment newInstance(int badgeType) {
         BadgeFragment fragment = new BadgeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        //args.putString(BADGE_TYPE, badgeType);
+        args.putInt(BADGE_TYPE, badgeType);
+        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +57,9 @@ public class BadgeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            badgeType = getArguments().getInt(BADGE_TYPE);
+            //badgeType = getArguments().getString(BADGE_TYPE);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -61,6 +67,49 @@ public class BadgeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_badge, container, false);
+        view = inflater.inflate(R.layout.fragment_badge, container, false);
+
+        imgView = view.findViewById(R.id.imgView_medal);
+        txtView = view.findViewById(R.id.badge_name);
+
+
+        //medal icons from R.drawable
+        // license: <a href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Pixel Buddha - Flaticon</a>
+        int badgeTypeBronze = BadgeType.BRONZE.num;
+        int badgeTypeSilver = BadgeType.SILVER.num;
+        int badgeTypeGold = BadgeType.GOLD.num;
+
+        /*
+        if (badgeType != null) {
+
+        }
+
+         */
+
+        //set image and name for fragment
+
+        /* TODO: switch does not work even with enum
+        switch (badgeType) {
+            case BadgeType.BRONZE.num:
+                imgView.setImageResource(R.drawable.bronze_medal);
+                txtView.setText(R.string.badge_name_bronze);
+                break;
+            case BADGE_TYPE_SILVER:
+                imgView.setImageResource(R.drawable.silver_medal);
+                txtView.setText(R.string.badge_name_silver);
+                break;
+            case BADGE_TYPE_GOLD:
+                imgView.setImageResource(R.drawable.gold_medal);
+                txtView.setText(R.string.badge_name_gold);
+                break;
+            default:
+                System.out.println("badgeType not accepted");
+                throw new RuntimeException(this.toString()
+                        + " not a valid input");
+        }
+
+         */
+
+        return view;
     }
 }
