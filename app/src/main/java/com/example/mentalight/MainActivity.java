@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
     private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
     private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
-    private boolean bronzeBadgeShown = false;
+    private boolean bronzeBadgeEarned = false;
+    private int numberOfFinishedQuestionaires = 0;
 
 
     @Override
@@ -96,21 +97,29 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
         if (!isScreeningFinished) {
 
+            //no questionaires have been finished yet --> set numberOfFinishedQuestionaires to 0
+            numberOfFinishedQuestionaires = 0;
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
+            editor.apply();
+
 
             //put function here to test on startup
             // TODO: remove later
 
-
+            /*
             hasBadge = true;
             badgeType = BADGE_TYPE_BRONZE;
 
             makeReward();
 
+             */
+
 
 
             //normal behaviour
             // TODO: uncomment later
-            //displayScreening();
+            displayScreening();
 
 
         } else {
@@ -296,8 +305,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             currentFrag = 0;
             continueButton.setText("Weiter");
 
+
+
+            //TODO: maybe put reward functionality here instead or put stuff above in else statement
+
+
+
             if(questionnaire.getSections() != null && overviewShown){
                 initUIsections(questionnaire, questionnaire.getSections());
+
+                //TODO: add reward functionality for sections?
+
             }
             // Falls man sich im Anfangsscreening befindet, Speichern und Auswerten
             if (questionnaire == questionnaireZTPB) {
@@ -323,11 +341,45 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 editor.apply();
 
 
-                //here: just finished Screening questionaire - lastQuestionReached=true && isScreeningFinished=true
+                //here: just completed Screening questionaire - lastQuestionReached=true && isScreeningFinished=true
 
-                initOverview(relevantQuestionnairesTitles);
+                //save that RewardScreen with bronze badge shown in sharedPreferences
+                bronzeBadgeEarned = true;
+                numberOfFinishedQuestionaires ++;
+                sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("bronzeBadgeShown", bronzeBadgeEarned);
+                editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
+                editor.apply();
+
+
+                //show RewardScreen with bronze badge for completing the first screening questionaire
+                hasBadge = true;
+                badgeType = BADGE_TYPE_BRONZE;
+
+                makeReward();
+
+
+
+                //normal behaviour
+                //TODO: uncomment later
+                //initOverview(relevantQuestionnairesTitles);
             }
+
+
+            //TODO: add functionality for other questionaires here
+            numberOfFinishedQuestionaires ++;
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
+            editor.apply();
+
+
+
         } else{
+
+            //TODO: check if oneRadioButtonChecked for lasQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
+            
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
              if(currentFragment instanceof LikertFragment){
@@ -650,6 +702,35 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     public void onProgressButtonClicked() {
         System.out.println("onProgressButtonClicked from MainActivity called");
 
+
+        //TODO: if just finished screening questionaire: initOverview()
+
+
+        //initOverview(relevantQuestionnairesTitles);
+
+        //lastQuestionReached is false here
+        /*
+        if (lastQuestionReached) {
+
+        }
+        if (!isScreeningFinished) {
+
+        }
+         */
+
+        //TODO: not working correctly yet
+        //if Screening questionaire was just completed (not before)
+        if (questionnaire == questionnaireZTPB) {
+            if (relevantQuestionnairesTitles != null) {
+                initOverview(relevantQuestionnairesTitles);
+            } else {
+                System.out.println("onProgressButtonClicked: relevantQuestionnairesTitles not initialized yet");
+            }
+        } else {
+            System.out.println("onProgressButtonClicked: current questionaire is not Screening");
+        }
+
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
@@ -659,7 +740,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             transaction.remove(fragment).commit();
             System.out.println("intro_container View removed");
         }
-        /*
+
+        /* TODO: delete later
         if(questionnaire.getSections() != null && !firstSectionIntroAlreadyShown){
             Section[] sections = questionnaire.getSections();
             showIntroSection(sections[0]);
@@ -667,10 +749,15 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         }
          */
 
-        //if just finished screening questionaire: initOverview()
+
+
+
+
+
+
 
         //TODO: just for testing. change later
-        displayScreening();
+        //displayScreening();
     }
 
 
