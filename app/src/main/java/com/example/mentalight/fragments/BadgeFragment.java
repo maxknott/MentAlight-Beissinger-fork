@@ -22,15 +22,24 @@ import com.example.mentalight.R;
 public class BadgeFragment extends Fragment {
 
     private static final String BADGE_TYPE = "badge_type";
-    /*
+
     private static final String BADGE_TYPE_BRONZE = "bronze";
     private static final String BADGE_TYPE_SILVER = "silver";
     private static final String BADGE_TYPE_GOLD = "gold";
 
-     */
+
+    /*
     private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
     private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
     private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
+    */
+
+    /*
+    private String badgeTypeBronze = getString(BadgeType.BRONZE.num);
+    private String badgeTypeSilver = getString(BadgeType.SILVER.num);
+    private String badgeTypeGold = getString(BadgeType.GOLD.num);
+
+     */
 
     private int badgeType;
 
@@ -75,22 +84,37 @@ public class BadgeFragment extends Fragment {
 
         //medal icons from R.drawable
         // license: <a href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Pixel Buddha - Flaticon</a>
+
+        /*
         int badgeTypeBronze = BadgeType.BRONZE.num;
         int badgeTypeSilver = BadgeType.SILVER.num;
         int badgeTypeGold = BadgeType.GOLD.num;
-
         /*
         if (badgeType != null) {
 
         }
-
          */
 
-        //set image and name for fragment
+        /*
+        String badgeTypeBronze = getString(BadgeType.BRONZE.num);
+        String badgeTypeSilver = getString(BadgeType.SILVER.num);
+        String badgeTypeGold = getString(BadgeType.GOLD.num);
+         */
 
-        /* TODO: switch does not work even with enum
-        switch (badgeType) {
-            case BadgeType.BRONZE.num:
+        /*
+        final int badgeTypeBronze = BadgeType.BRONZE.num;
+        final int badgeTypeSilver = BadgeType.BRONZE.num;
+        final int badgeTypeGold = BadgeType.BRONZE.num;
+        */
+
+
+        String badgeTypeString = getString(badgeType);
+
+        //set image and name for fragment
+        // hardcoded because switch does not work with my constants, even with enum (--> "constant expression required") - compile time constant
+        // TODO: change to else-if and compare ints instead
+        switch (badgeTypeString) {
+            case BADGE_TYPE_BRONZE:
                 imgView.setImageResource(R.drawable.bronze_medal);
                 txtView.setText(R.string.badge_name_bronze);
                 break;
@@ -108,7 +132,6 @@ public class BadgeFragment extends Fragment {
                         + " not a valid input");
         }
 
-         */
 
         return view;
     }

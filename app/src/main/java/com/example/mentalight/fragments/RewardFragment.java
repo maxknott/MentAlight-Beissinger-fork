@@ -22,10 +22,8 @@ import com.example.mentalight.R;
 public class RewardFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "title";
-    private static final String ARG_PARAM2 = "subtitle";
-    private static final String ARG_PARAM3 = "text";
-    private static final String ARG_PARAM4 = "badge";
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     private String mParam1, mParam2;
 
@@ -91,15 +89,16 @@ public class RewardFragment extends Fragment {
             //textView.setText(textText);
 
         }
-
          */
 
+        //view.findViewById(R.id.badge_container) ---- moved to MainActivity
 
-
-        //TODO: view.findViewById(R.id.badge_container) ---- maybe moved to MainActivity
+        //set background color to hide ProgressBar and BackButton
+        view.setBackgroundColor(getResources().getColor(R.color.beige));
 
 
         Button progressButton = view.findViewById(R.id.progress_button);
+
         progressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

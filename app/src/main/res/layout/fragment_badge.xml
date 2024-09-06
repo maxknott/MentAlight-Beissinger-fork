@@ -31,7 +31,7 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@drawable/bronze_medal"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:paddingBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/badge_name"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -44,11 +44,12 @@
         android:id="@+id/badge_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
+        android:layout_margin="20dp"
+
         android:text="@string/badge_name_bronze"
         android:textAlignment="center"
         android:textColor="@color/dark_blue"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent">
     </TextView>
 

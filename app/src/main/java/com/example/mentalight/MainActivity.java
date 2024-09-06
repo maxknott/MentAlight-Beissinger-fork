@@ -63,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     //by Max:
     private boolean hasBadge;
     private RewardManager rewardManager;
+    private int badgeType;
+    private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
+    private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
+    private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
+    private boolean bronzeBadgeShown = false;
 
 
     @Override
@@ -92,15 +97,19 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         if (!isScreeningFinished) {
 
 
-            //put function here to test on startup TODO: remove later
+            //put function here to test on startup
+            // TODO: remove later
 
 
             hasBadge = true;
+            badgeType = BADGE_TYPE_BRONZE;
+
             makeReward();
 
 
 
-            //TODO: uncomment later
+            //normal behaviour
+            // TODO: uncomment later
             //displayScreening();
 
 
@@ -313,7 +322,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 }
                 editor.apply();
 
-                //TODO: if (isScreeningFinished == false): makeReward() with bronze medal (first medal/badge)
+
+                //here: just finished Screening questionaire - lastQuestionReached=true && isScreeningFinished=true
 
                 initOverview(relevantQuestionnairesTitles);
             }
@@ -541,7 +551,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private void makeReward() {
 
         if (hasBadge) {
-            rewardManager = rewardManagerWithBadge();
+            if (badgeType == BADGE_TYPE_BRONZE) {
+                rewardManager = rewardManagerWithBadgeBronze();
+            } else if (badgeType == BADGE_TYPE_SILVER) {
+                rewardManager = rewardManagerWithBadgeSilver();
+            } else if (badgeType == BADGE_TYPE_GOLD) {
+                rewardManager = rewardManagerWithBadgeGold();
+            } else {
+                System.out.println("MainActivity.makeReward(): badgeType not accepted");
+                throw new RuntimeException(this.toString()
+                        + " not a valid input");
+            }
             showRewardScreen(rewardManager);
             showBadge(rewardManager);
         } else {
@@ -554,10 +574,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     //TODO: hide back_button and progress_bar
     private void showRewardScreen(RewardManager rewardManager) {
 
-        RewardFragment rewardFragment = getRewardFragment(rewardManager);
-        //RewardFragment rewardFragment = new RewardFragment();
-
-        //TODO: try newInstance(String s, String ss) ----- (or not?)
+        RewardFragment rewardFragment = rewardManager.getRewardFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -595,20 +612,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
     }
 
-    //TODO: add functionality for showing different badges/medals for different states
+
     private void showBadge(RewardManager rewardManager) {
-        BadgeFragment badgeFragment = getBadgeFragment(rewardManager);
+
+        BadgeFragment badgeFragment = rewardManager.getBadgeFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.badge_container, badgeFragment)
                 .commit();
         System.out.println("badgeFragment created and shown");
-    }
 
-    //returns new RewardManager-object with badge
-    private RewardManager rewardManagerWithBadge() {
-        return new RewardManager(true);
     }
 
     //returns new RewardManager-object without badge
@@ -616,22 +630,22 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         return new RewardManager(false);
     }
 
-    //returns complete reward screen as Reward-object
-    private Reward getRewardScreen(RewardManager rewardManager) {
-        return rewardManager.getRewardScreen();
+    //returns new RewardManager-object with bronze badge
+    private RewardManager rewardManagerWithBadgeBronze() {
+        return new RewardManager(true, BADGE_TYPE_BRONZE);
     }
 
-    //returns fragment with arguments as RewardFragment-object
-    private RewardFragment getRewardFragment(RewardManager rewardManager) {
-        return rewardManager.getRewardFragment();
+    //returns new RewardManager-object with silver badge
+    private RewardManager rewardManagerWithBadgeSilver() {
+        return new RewardManager(true, BADGE_TYPE_SILVER);
     }
 
-    //returns fragment with arguments as BadgeFragment-object
-    private BadgeFragment getBadgeFragment(RewardManager rewardManager) {
-        return rewardManager.getBadgeFragment();
+    //returns new RewardManager-object with gold badge
+    private RewardManager rewardManagerWithBadgeGold() {
+        return new RewardManager(true, BADGE_TYPE_GOLD);
     }
 
-    //called when progress-button on rewardFragment is clicked
+    //called when progress-button ("Fortschritt anzeigen") on rewardFragment is clicked
     @Override
     public void onProgressButtonClicked() {
         System.out.println("onProgressButtonClicked from MainActivity called");
@@ -652,6 +666,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             firstSectionIntroAlreadyShown = true;
         }
          */
+
+        //if just finished screening questionaire: initOverview()
 
         //TODO: just for testing. change later
         displayScreening();
