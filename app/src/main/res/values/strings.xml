@@ -18,5 +18,10 @@
     <string name="badge_type_bronze">bronze</string>
     <string name="badge_type_silver">silver</string>
     <string name="badge_type_gold">gold</string>
+    <string name="progress_screen_title">Mein Fortschritt</string>
+    <string name="progress_questionaire_title_text">Fragebogen Fortschritt</string>
+    <string name="progress_badge_collection_title_text">Medaillen Sammlung</string>
+    <string name="badge_collection_title_text">Fragebogen Fortschritt</string>
+    <string name="menu_button_text">Menü anzeigen</string>
 
 </resources>
