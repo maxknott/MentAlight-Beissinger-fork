@@ -16,12 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.mentalight.fragments.BadgeFragment;
 import com.example.mentalight.fragments.CheckboxFragment;
 import com.example.mentalight.fragments.ChipsFragment;
 import com.example.mentalight.fragments.FreeTextFragment;
 import com.example.mentalight.fragments.IntroFragment;
 import com.example.mentalight.fragments.LikertFragment;
 import com.example.mentalight.fragments.OverviewFragment;
+import com.example.mentalight.fragments.RewardFragment;
 import com.example.mentalight.fragments.SingleChoiceFragment;
 
 import org.json.JSONException;
@@ -29,7 +31,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements OnStartButtonClickListener, OnQuestionnaireClickedListener{
+public class MainActivity extends AppCompatActivity implements OnStartButtonClickListener, OnQuestionnaireClickedListener, OnProgressButtonClickedListener {
+
     private Questionnaire questionnaire, rosenbergSelfEsteem, dassQuestionnaire, sek27, wirf, questionnaireZTPB, emotionsanalyse;
     private final QuestionnaireManager manager = new QuestionnaireManager();
     private ArrayList<Questionnaire> relevantQuestionnaires = new ArrayList<>();
@@ -56,6 +59,19 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private Subsection[] subsections;
     private HashMap<String, String> savedResults = new HashMap<>();
 
+
+    //by Max:
+    private boolean hasBadge;
+    private RewardManager rewardManager;
+    private int badgeType;
+    private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
+    private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
+    private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
+    private boolean bronzeBadgeEarned = false;
+    private int numberOfFinishedQuestionaires = 0;
+    private ArrayList<String> finishedQuestionairesTitles = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +97,32 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         boolean isScreeningFinished = sharedPreferences.getBoolean("screeningFinished", false);
 
         if (!isScreeningFinished) {
+
+            //no questionaires have been finished yet --> set numberOfFinishedQuestionaires to 0
+            numberOfFinishedQuestionaires = 0;
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
+            editor.apply();
+
+
+            //put function here to test on startup
+            // TODO: remove later
+
+            /*
+            hasBadge = true;
+            badgeType = BADGE_TYPE_BRONZE;
+
+            makeReward(hasBadge);
+
+             */
+
+
+
+            //normal behaviour
+            // TODO: uncomment later
             displayScreening();
+
+
         } else {
             // Überprüfen, ob relevante Fragebögen vorhanden sind
             sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -103,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private void displayScreening() {
         questionnaireZTPB = getQuestionnaireFromFile("ZTPB.json");
         questions = questionnaireZTPB.getQuestions();
+
+        //by Max: var questionaire is not correct when Screening is displayed
+        questionnaire = questionnaireZTPB;
+
         initUI(questionnaireZTPB, questions);
     }
 
@@ -257,14 +302,28 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     // Fortsetzungsbutton wurde geklickt
     private void continueButtonClicked() {
 
+        //TODO: if lastQuestionReached: makeReward();
+        // add functionality to show different medals for different states
         if(lastQuestionReached){
             currentQuestion = 1;
             lastQuestionReached = false;
             currentFrag = 0;
             continueButton.setText("Weiter");
 
+
+            //TODO: maybe put reward functionality here instead or put stuff above in else statement? - maybe not?
+
+            //if any questionaire finished --> show RewardScreen without Badge
+            hasBadge = false;
+            makeReward(hasBadge);
+
+
             if(questionnaire.getSections() != null && overviewShown){
                 initUIsections(questionnaire, questionnaire.getSections());
+
+                //here: questionaire with sections from overview just finished
+                //TODO: add reward functionality for sections?
+
             }
             // Falls man sich im Anfangsscreening befindet, Speichern und Auswerten
             if (questionnaire == questionnaireZTPB) {
@@ -289,9 +348,48 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 }
                 editor.apply();
 
-                initOverview(relevantQuestionnairesTitles);
+
+
+                //by Max:
+                //here: just completed Screening questionaire
+
+                //save that RewardScreen with bronze badge has been shown in sharedPreferences
+                bronzeBadgeEarned = true;
+                sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("bronzeBadgeShown", bronzeBadgeEarned);
+                editor.apply();
+
+                //show RewardScreen with bronze badge for completing the first screening questionaire
+                hasBadge = true;
+                badgeType = BADGE_TYPE_BRONZE;
+
+                makeReward(hasBadge);
+
+
+
+                //normal behaviour
+                //TODO: uncomment later
+                //initOverview(relevantQuestionnairesTitles);
             }
+
+            //TODO: add functionality for other questionaires here
+            //TODO: show rewardScreen without Badge
+
+            //adding current questionaire to finishedQuestionaires
+            finishedQuestionairesTitles.add(questionnaire.getTitle());
+            numberOfFinishedQuestionaires = finishedQuestionairesTitles.size();
+
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
+            editor.apply();
+
+
         } else{
+
+            //TODO: check if oneRadioButtonChecked for lasQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
+
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
              if(currentFragment instanceof LikertFragment){
@@ -331,12 +429,22 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 if(currentQuestion == numberOfQuestions-1){
                     continueButton.setText("Abschließen");
                     lastQuestionReached = true;
+
+                    //TODO: here last question reached -1
                 }
                 currentQuestion++;
                 updateProgressBar();
             }
         }
     }
+
+
+    //TODO move down later
+    private void questionaireFinished() {
+
+    }
+
+
 
     // Zurückbutton geklickt, Anzeigen der vorhergehenden Frage
     private void backButtonClicked() {
@@ -503,4 +611,147 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         currentFrag = 0;
         initOverview(relevantQuestionnairesTitles);
     }
+
+
+
+
+
+    //
+    // by Max:
+    //
+
+    private void makeReward(boolean hasBadge) {
+
+        if (hasBadge) {
+            if (badgeType == BADGE_TYPE_BRONZE) {
+                rewardManager = rewardManagerWithBadgeBronze();
+            } else if (badgeType == BADGE_TYPE_SILVER) {
+                rewardManager = rewardManagerWithBadgeSilver();
+            } else if (badgeType == BADGE_TYPE_GOLD) {
+                rewardManager = rewardManagerWithBadgeGold();
+            } else {
+                System.out.println("MainActivity.makeReward(): badgeType not accepted");
+                throw new RuntimeException(this.toString()
+                        + " not a valid input");
+            }
+            showRewardScreen(rewardManager);
+            showBadge(rewardManager);
+        } else {
+            rewardManager = rewardManagerWithoutBadge();
+            showRewardScreen(rewardManager);
+        }
+
+    }
+
+    private void showRewardScreen(RewardManager rewardManager) {
+
+        RewardFragment rewardFragment = rewardManager.getRewardFragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.intro_container, rewardFragment)
+                .commit();
+        System.out.println("rewardFragment created and shown");
+
+    }
+
+
+    private void showBadge(RewardManager rewardManager) {
+
+        BadgeFragment badgeFragment = rewardManager.getBadgeFragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.badge_container, badgeFragment)
+                .commit();
+        System.out.println("badgeFragment created and shown");
+
+    }
+
+
+
+    //returns new RewardManager-object without badge
+    private RewardManager rewardManagerWithoutBadge() {
+        return new RewardManager(false);
+    }
+
+    //returns new RewardManager-object with bronze badge
+    private RewardManager rewardManagerWithBadgeBronze() {
+        return new RewardManager(true, BADGE_TYPE_BRONZE);
+    }
+
+    //returns new RewardManager-object with silver badge
+    private RewardManager rewardManagerWithBadgeSilver() {
+        return new RewardManager(true, BADGE_TYPE_SILVER);
+    }
+
+    //returns new RewardManager-object with gold badge
+    private RewardManager rewardManagerWithBadgeGold() {
+        return new RewardManager(true, BADGE_TYPE_GOLD);
+    }
+
+    //called when progress-button ("Fortschritt anzeigen") on rewardFragment is clicked
+    @Override
+    public void onProgressButtonClicked() {
+        System.out.println("onProgressButtonClicked from MainActivity called");
+
+
+        //TODO: if just finished screening questionaire: initOverview()
+
+
+        initOverview(relevantQuestionnairesTitles);
+
+        //lastQuestionReached is false here
+
+        //TODO: not working correctly yet
+        //if Screening questionaire was just completed (not before)
+
+
+        //var questionaire is somehow not "ZTPT", but "Emotionen" (makes no sense at all)
+        /*
+        if (questionnaire == questionnaireZTPB) {
+            if (relevantQuestionnairesTitles != null) {
+                initOverview(relevantQuestionnairesTitles);
+            } else {
+                System.out.println("onProgressButtonClicked: relevantQuestionnairesTitles not initialized yet");
+            }
+        } else {
+            System.out.println("onProgressButtonClicked: current questionaire is not Screening");
+        }
+
+         */
+
+
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
+
+        // hide rewardFragment (and badgeFragment) by removing intro_container
+        if (fragment != null) {
+            transaction.remove(fragment).commit();
+            System.out.println("intro_container View removed");
+        }
+
+        /* TODO: delete later
+        if(questionnaire.getSections() != null && !firstSectionIntroAlreadyShown){
+            Section[] sections = questionnaire.getSections();
+            showIntroSection(sections[0]);
+            firstSectionIntroAlreadyShown = true;
+        }
+         */
+
+
+
+
+
+
+
+
+        //TODO: just for testing. change later
+        //displayScreening();
+    }
+
+
 }
