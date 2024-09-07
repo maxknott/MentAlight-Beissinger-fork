@@ -31,7 +31,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements OnStartButtonClickListener, OnQuestionnaireClickedListener, OnProgressButtonClickedListener {
+public class MainActivity extends AppCompatActivity implements OnStartButtonClickListener, OnQuestionnaireClickedListener, OnProgressButtonClickedListener, OnMenuButtonClickedListener {
 
     private Questionnaire questionnaire, rosenbergSelfEsteem, dassQuestionnaire, sek27, wirf, questionnaireZTPB, emotionsanalyse;
     private final QuestionnaireManager manager = new QuestionnaireManager();
@@ -655,7 +655,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
     }
 
-
     private void showBadge(RewardManager rewardManager) {
 
         BadgeFragment badgeFragment = rewardManager.getBadgeFragment();
@@ -665,6 +664,18 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 .replace(R.id.badge_container, badgeFragment)
                 .commit();
         System.out.println("badgeFragment created and shown");
+
+    }
+
+    private void makeProgressScreen() {
+
+    }
+
+    private void showProgress() {
+
+    }
+
+    private void showBadgeCollection() {
 
     }
 
@@ -696,18 +707,13 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("onProgressButtonClicked from MainActivity called");
 
 
-        //TODO: if just finished screening questionaire: initOverview()
-
-
         initOverview(relevantQuestionnairesTitles);
 
         //lastQuestionReached is false here
 
         //TODO: not working correctly yet
         //if Screening questionaire was just completed (not before)
-
-
-        //var questionaire is somehow not "ZTPT", but "Emotionen" (makes no sense at all)
+        //var questionaire is somehow not "ZTPT", but "Emotionen" (makes no sense at all) -- hotfixed
         /*
         if (questionnaire == questionnaireZTPB) {
             if (relevantQuestionnairesTitles != null) {
@@ -751,6 +757,12 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
         //TODO: just for testing. change later
         //displayScreening();
+    }
+
+    //called when menu-button ("Menü anzeigen") on progressFragment is clicked
+    @Override
+    public void onMenuButtonClicked() {
+
     }
 
 
