@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
     private boolean bronzeBadgeEarned = false;
     private int numberOfFinishedQuestionaires = 0;
+    private ArrayList<String> finishedQuestionairesTitles = new ArrayList<>();
 
 
     @Override
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             hasBadge = true;
             badgeType = BADGE_TYPE_BRONZE;
 
-            makeReward();
+            makeReward(hasBadge);
 
              */
 
@@ -143,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private void displayScreening() {
         questionnaireZTPB = getQuestionnaireFromFile("ZTPB.json");
         questions = questionnaireZTPB.getQuestions();
+
+        //by Max: var questionaire is not correct when Screening is displayed
+        questionnaire = questionnaireZTPB;
+
         initUI(questionnaireZTPB, questions);
     }
 
@@ -306,14 +311,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             continueButton.setText("Weiter");
 
 
+            //TODO: maybe put reward functionality here instead or put stuff above in else statement? - maybe not?
 
-            //TODO: maybe put reward functionality here instead or put stuff above in else statement
-
+            //if any questionaire finished --> show RewardScreen without Badge
+            hasBadge = false;
+            makeReward(hasBadge);
 
 
             if(questionnaire.getSections() != null && overviewShown){
                 initUIsections(questionnaire, questionnaire.getSections());
 
+                //here: questionaire with sections from overview just finished
                 //TODO: add reward functionality for sections?
 
             }
@@ -341,23 +349,22 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 editor.apply();
 
 
-                //here: just completed Screening questionaire - lastQuestionReached=true && isScreeningFinished=true
 
-                //save that RewardScreen with bronze badge shown in sharedPreferences
+                //by Max:
+                //here: just completed Screening questionaire
+
+                //save that RewardScreen with bronze badge has been shown in sharedPreferences
                 bronzeBadgeEarned = true;
-                numberOfFinishedQuestionaires ++;
                 sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.putBoolean("bronzeBadgeShown", bronzeBadgeEarned);
-                editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
                 editor.apply();
-
 
                 //show RewardScreen with bronze badge for completing the first screening questionaire
                 hasBadge = true;
                 badgeType = BADGE_TYPE_BRONZE;
 
-                makeReward();
+                makeReward(hasBadge);
 
 
 
@@ -366,20 +373,23 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 //initOverview(relevantQuestionnairesTitles);
             }
 
-
             //TODO: add functionality for other questionaires here
-            numberOfFinishedQuestionaires ++;
+            //TODO: show rewardScreen without Badge
+
+            //adding current questionaire to finishedQuestionaires
+            finishedQuestionairesTitles.add(questionnaire.getTitle());
+            numberOfFinishedQuestionaires = finishedQuestionairesTitles.size();
+
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
             editor.apply();
 
 
-
         } else{
 
             //TODO: check if oneRadioButtonChecked for lasQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
-            
+
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
              if(currentFragment instanceof LikertFragment){
@@ -419,12 +429,22 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 if(currentQuestion == numberOfQuestions-1){
                     continueButton.setText("Abschließen");
                     lastQuestionReached = true;
+
+                    //TODO: here last question reached -1
                 }
                 currentQuestion++;
                 updateProgressBar();
             }
         }
     }
+
+
+    //TODO move down later
+    private void questionaireFinished() {
+
+    }
+
+
 
     // Zurückbutton geklickt, Anzeigen der vorhergehenden Frage
     private void backButtonClicked() {
@@ -600,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     // by Max:
     //
 
-    private void makeReward() {
+    private void makeReward(boolean hasBadge) {
 
         if (hasBadge) {
             if (badgeType == BADGE_TYPE_BRONZE) {
@@ -623,7 +643,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
     }
 
-    //TODO: hide back_button and progress_bar
     private void showRewardScreen(RewardManager rewardManager) {
 
         RewardFragment rewardFragment = rewardManager.getRewardFragment();
@@ -633,34 +652,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 .replace(R.id.intro_container, rewardFragment)
                 .commit();
         System.out.println("rewardFragment created and shown");
-
-        /*
-        //if statement replaced
-        //FragmentManager only available in Activities or Fragments
-        if(hasBadge) {
-
-            BadgeFragment badgeFragment = getBadgeFragment(rewardManager);
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.intro_container, rewardFragment)
-                    .commit();
-            System.out.println("rewardFragment created and shown");
-
-
-            //show badgeFragment
-            fragmentManager.beginTransaction()
-                    .replace(R.id.badge_container, badgeFragment)
-                    .commit();
-            System.out.println("badgeFragment created and shown");
-        } else {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.intro_container, rewardFragment)
-                    .commit();
-            System.out.println("rewardFragment created and shown");
-        }
-         */
 
     }
 
@@ -676,6 +667,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("badgeFragment created and shown");
 
     }
+
+
 
     //returns new RewardManager-object without badge
     private RewardManager rewardManagerWithoutBadge() {
@@ -706,20 +699,16 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         //TODO: if just finished screening questionaire: initOverview()
 
 
-        //initOverview(relevantQuestionnairesTitles);
+        initOverview(relevantQuestionnairesTitles);
 
         //lastQuestionReached is false here
-        /*
-        if (lastQuestionReached) {
-
-        }
-        if (!isScreeningFinished) {
-
-        }
-         */
 
         //TODO: not working correctly yet
         //if Screening questionaire was just completed (not before)
+
+
+        //var questionaire is somehow not "ZTPT", but "Emotionen" (makes no sense at all)
+        /*
         if (questionnaire == questionnaireZTPB) {
             if (relevantQuestionnairesTitles != null) {
                 initOverview(relevantQuestionnairesTitles);
@@ -729,6 +718,10 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         } else {
             System.out.println("onProgressButtonClicked: current questionaire is not Screening");
         }
+
+         */
+
+
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
