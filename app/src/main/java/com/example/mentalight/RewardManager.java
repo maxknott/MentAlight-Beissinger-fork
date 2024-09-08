@@ -20,13 +20,13 @@ public class RewardManager {
     private int badgeType;
 
 
-    //Constructor for RewardManager to create Reward without Badge
+    //Constructor for RewardManager to create RewardScreen without Badge
     public RewardManager(boolean hasBadge) {
         this.hasBadge = hasBadge;
         init();
     }
 
-    //Constructor for RewardManager to create Reward with Badge
+    //Constructor for RewardManager to create RewardScreen with Badge
     public RewardManager(boolean hasBadge, int badgeType) {
         this.hasBadge = hasBadge;
         if (hasBadge) {

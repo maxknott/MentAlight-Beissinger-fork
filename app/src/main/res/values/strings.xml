@@ -23,5 +23,6 @@
     <string name="progress_badge_collection_title_text">Medaillen Sammlung</string>
     <string name="badge_collection_title_text">Fragebogen Fortschritt</string>
     <string name="menu_button_text">Menü anzeigen</string>
+    <string name="progress_questionaire_progress_bar_subtext_text">Fragebogen bereits abgeschlossen</string>
 
 </resources>

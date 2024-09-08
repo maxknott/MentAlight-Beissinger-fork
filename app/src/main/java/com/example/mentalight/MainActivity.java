@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.mentalight.fragments.BadgeCollectionFragment;
 import com.example.mentalight.fragments.BadgeFragment;
 import com.example.mentalight.fragments.CheckboxFragment;
 import com.example.mentalight.fragments.ChipsFragment;
@@ -23,6 +24,8 @@ import com.example.mentalight.fragments.FreeTextFragment;
 import com.example.mentalight.fragments.IntroFragment;
 import com.example.mentalight.fragments.LikertFragment;
 import com.example.mentalight.fragments.OverviewFragment;
+import com.example.mentalight.fragments.ProgressFragment;
+import com.example.mentalight.fragments.ProgressQuestionaireFragment;
 import com.example.mentalight.fragments.RewardFragment;
 import com.example.mentalight.fragments.SingleChoiceFragment;
 
@@ -70,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private boolean bronzeBadgeEarned = false;
     private int numberOfFinishedQuestionaires = 0;
     private ArrayList<String> finishedQuestionairesTitles = new ArrayList<>();
+    private ProgressBar progressQuestionaireProgressBar;
+    private TextView progressQuestionaireProgressBarText;
+    private int numberOfQuestionaires;
+    private ProgressManager progressManager;
 
 
     @Override
@@ -108,19 +115,19 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             //put function here to test on startup
             // TODO: remove later
 
-            /*
+
             hasBadge = true;
             badgeType = BADGE_TYPE_BRONZE;
 
             makeReward(hasBadge);
 
-             */
+
 
 
 
             //normal behaviour
             // TODO: uncomment later
-            displayScreening();
+            //displayScreening();
 
 
         } else {
@@ -667,16 +674,66 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
     }
 
-    private void makeProgressScreen() {
+    private void initProgressQuestionaireProgressBar() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        numberOfQuestionaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
+        numberOfFinishedQuestionaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
 
+        progressQuestionaireProgressBar = findViewById(R.id.progress_questionaire_progress_bar);
+
+        progressQuestionaireProgressBar.setMax(numberOfQuestionaires);
+
+        progressQuestionaireProgressBarText = findViewById(R.id.progress_questionaire_progress_bar_text);
+        progressQuestionaireProgressBarText.setText(numberOfFinishedQuestionaires + "/" + numberOfQuestionaires);
+        progressQuestionaireProgressBar.setProgress(0);
     }
 
-    private void showProgress() {
+    private void updateProgressQuestionaireProgressBar() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        numberOfQuestionaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
+        numberOfFinishedQuestionaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
 
+        //progressQuestionaireProgressBar.setMax(numberOfQuestionaires);
+
+        progressQuestionaireProgressBar.setProgress(numberOfFinishedQuestionaires);
+        progressQuestionaireProgressBarText.setText(numberOfFinishedQuestionaires + "/" + numberOfQuestionaires);
+    }
+
+    private void makeProgressScreen() {
+        progressManager = new ProgressManager();
+        showProgressScreen();
+        showProgressQuestionaire();
+        showBadgeCollection();
+    }
+
+    private void showProgressScreen() {
+        ProgressFragment progressScreenFragment = progressManager.getProgressScreenFragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.intro_container, progressScreenFragment)
+                .commit();
+        System.out.println("progressFragment created and shown");
+    }
+
+    private void showProgressQuestionaire() {
+        ProgressQuestionaireFragment progressQuestionaireFragment = progressManager.getProgressQuestionaireFragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.progress_questionaire_container, progressQuestionaireFragment)
+                .commit();
+        System.out.println("progressQuestionaireFragment created and shown");
     }
 
     private void showBadgeCollection() {
+        BadgeCollectionFragment badgeCollectionFragment = progressManager.getBadgeCollectionFragment();
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.progress_badge_collection_container, badgeCollectionFragment)
+                .commit();
+        System.out.println("badgeCollectionFragment created and shown");
     }
 
 
@@ -706,8 +763,11 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     public void onProgressButtonClicked() {
         System.out.println("onProgressButtonClicked from MainActivity called");
 
+        //init progress screen
+        makeProgressScreen();
 
-        initOverview(relevantQuestionnairesTitles);
+
+        //initOverview(relevantQuestionnairesTitles);
 
         //lastQuestionReached is false here
 
@@ -728,8 +788,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
          */
 
 
-
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
@@ -737,7 +795,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         // hide rewardFragment (and badgeFragment) by removing intro_container
         if (fragment != null) {
             transaction.remove(fragment).commit();
-            System.out.println("intro_container View removed");
+            System.out.println("intro_container View removed (progressButton clicked)");
         }
 
         /* TODO: delete later
@@ -750,11 +808,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
 
 
-
-
-
-
-
         //TODO: just for testing. change later
         //displayScreening();
     }
@@ -762,6 +815,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     //called when menu-button ("Menü anzeigen") on progressFragment is clicked
     @Override
     public void onMenuButtonClicked() {
+        initOverview(relevantQuestionnairesTitles);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
+
+        // hide rewardFragment (and badgeFragment) by removing intro_container
+        if (fragment != null) {
+            transaction.remove(fragment).commit();
+            System.out.println("intro_container View removed (menuButton clicked)");
+        }
 
     }
 
