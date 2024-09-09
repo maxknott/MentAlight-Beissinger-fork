@@ -1,14 +1,13 @@
 package com.example.mentalight;
 
 import com.example.mentalight.fragments.BadgeCollectionFragment;
-import com.example.mentalight.fragments.BadgeFragment;
 import com.example.mentalight.fragments.ProgressFragment;
-import com.example.mentalight.fragments.ProgressQuestionaireFragment;
+import com.example.mentalight.fragments.ProgressQuestionnaireFragment;
 
 public class ProgressManager {
 
     private ProgressFragment progressScreenFragment;
-    private ProgressQuestionaireFragment progressQuestionaireFragment;
+    private ProgressQuestionnaireFragment progressQuestionnaireFragment;
     private BadgeCollectionFragment badgeCollectionFragment;
     private Progress progressScreen;
 
@@ -22,7 +21,7 @@ public class ProgressManager {
     private void init() {
         initProgressScreen();
         //initProgressBar();
-        initProgressQuestionaire();
+        initProgressQuestionnaire();
         initBadgeCollection();
     }
 
@@ -35,10 +34,10 @@ public class ProgressManager {
         progressScreenFragment = new ProgressFragment();
     }
 
-    private void initProgressQuestionaire() {
+    private void initProgressQuestionnaire() {
         if (progressScreen != null) {
-            progressQuestionaireFragment = new ProgressQuestionaireFragment();
-            System.out.println("ProgressManager: progressQuestionaireFragment created");
+            progressQuestionnaireFragment = new ProgressQuestionnaireFragment();
+            System.out.println("ProgressManager: progressQuestionnaireFragment created");
         } else {
             throw new RuntimeException(this.toString()
                     + " must initiate Progress progressScreen before creating a fragment");
@@ -73,13 +72,13 @@ public class ProgressManager {
 
     }
 
-    //returns fragment as ProgressQuestionaireFragment-object
-    public ProgressQuestionaireFragment getProgressQuestionaireFragment() {
-        if (progressQuestionaireFragment != null) {
-            return progressQuestionaireFragment;
+    //returns fragment as ProgressQuestionnaireFragment-object
+    public ProgressQuestionnaireFragment getProgressQuestionnaireFragment() {
+        if (progressQuestionnaireFragment != null) {
+            return progressQuestionnaireFragment;
         } else {
             throw new RuntimeException(this.toString()
-                    + " has not initiated progressQuestionaireFragment");
+                    + " has not initiated progressQuestionnaireFragment");
         }
 
     }

@@ -29,14 +29,14 @@
             android:id="@+id/group2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="group_progress_questionaire,group_progress_badge_collection" />
+            app:constraint_referenced_ids="group_progress_questionnaire,group_progress_badge_collection" />
     </ScrollView>
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_progress_questionaire"
+        android:id="@+id/group_progress_questionnaire"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="progress_questionaire_title,progress_questionaire_container"
+        app:constraint_referenced_ids="progress_questionnaire_title,progress_questionnaire_container"
         app:layout_constraintTop_toBottomOf="@+id/progress_title" />
 
     <androidx.constraintlayout.widget.Group
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="progress_badge_collection_title,progress_badge_collection_container"
-        app:layout_constraintTop_toBottomOf="@+id/progress_questionaire_container" />
+        app:layout_constraintTop_toBottomOf="@+id/progress_questionnaire_container" />
 
     <Button
         android:id="@+id/menu_button"
@@ -58,7 +58,7 @@
     </Button>
 
     <TextView
-        android:id="@+id/progress_questionaire_title"
+        android:id="@+id/progress_questionnaire_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
@@ -82,17 +82,17 @@
         android:textSize="30sp"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="35dp"
-        app:layout_constraintTop_toBottomOf="@+id/progress_questionaire_container">
+        app:layout_constraintTop_toBottomOf="@+id/progress_questionnaire_container">
     </TextView>
 
     <LinearLayout
-        android:id="@+id/progress_questionaire_container"
+        android:id="@+id/progress_questionnaire_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="10dp"
         android:layout_marginBottom="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/progress_questionaire_title">
+        app:layout_constraintTop_toBottomOf="@+id/progress_questionnaire_title">
     </LinearLayout>
 
     <LinearLayout

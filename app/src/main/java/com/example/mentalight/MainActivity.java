@@ -25,7 +25,7 @@ import com.example.mentalight.fragments.IntroFragment;
 import com.example.mentalight.fragments.LikertFragment;
 import com.example.mentalight.fragments.OverviewFragment;
 import com.example.mentalight.fragments.ProgressFragment;
-import com.example.mentalight.fragments.ProgressQuestionaireFragment;
+import com.example.mentalight.fragments.ProgressQuestionnaireFragment;
 import com.example.mentalight.fragments.RewardFragment;
 import com.example.mentalight.fragments.SingleChoiceFragment;
 
@@ -71,12 +71,14 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
     private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
     private boolean bronzeBadgeEarned = false;
-    private int numberOfFinishedQuestionaires = 0;
-    private ArrayList<String> finishedQuestionairesTitles = new ArrayList<>();
-    private ProgressBar progressQuestionaireProgressBar;
-    private TextView progressQuestionaireProgressBarText;
-    private int numberOfQuestionaires;
+    private int numberOfFinishedQuestionnaires = 0;
+    private ArrayList<String> finishedQuestionnairesTitles = new ArrayList<>();
+    private ProgressBar progressQuestionnaireProgressBar;
+    private TextView progressQuestionnaireProgressBarText;
+    private int numberOfQuestionnaires;
     private ProgressManager progressManager;
+    private ArrayList<Questionnaire> allQuestionnaires = new ArrayList<>();
+    private String[] allQuestionnairesTitles;
 
 
     @Override
@@ -106,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         if (!isScreeningFinished) {
 
             //no questionaires have been finished yet --> set numberOfFinishedQuestionaires to 0
-            numberOfFinishedQuestionaires = 0;
+            numberOfFinishedQuestionnaires = 0;
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
+            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionnaires);
             editor.apply();
 
 
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         questionnaireZTPB = getQuestionnaireFromFile("ZTPB.json");
         questions = questionnaireZTPB.getQuestions();
 
-        //by Max: var questionaire is not correct when Screening is displayed
+        //by Max: var questionnaire is not correct when Screening is displayed
         questionnaire = questionnaireZTPB;
 
         initUI(questionnaireZTPB, questions);
@@ -384,12 +386,12 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             //TODO: show rewardScreen without Badge
 
             //adding current questionaire to finishedQuestionaires
-            finishedQuestionairesTitles.add(questionnaire.getTitle());
-            numberOfFinishedQuestionaires = finishedQuestionairesTitles.size();
+            finishedQuestionnairesTitles.add(questionnaire.getTitle());
+            numberOfFinishedQuestionnaires = finishedQuestionnairesTitles.size();
 
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionaires);
+            editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionnaires);
             editor.apply();
 
 
@@ -676,33 +678,33 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
     private void initProgressQuestionaireProgressBar() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        numberOfQuestionaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
-        numberOfFinishedQuestionaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
+        numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
+        numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
 
-        progressQuestionaireProgressBar = findViewById(R.id.progress_questionaire_progress_bar);
+        progressQuestionnaireProgressBar = findViewById(R.id.progress_questionnaire_progress_bar);
 
-        progressQuestionaireProgressBar.setMax(numberOfQuestionaires);
+        progressQuestionnaireProgressBar.setMax(numberOfQuestionnaires);
 
-        progressQuestionaireProgressBarText = findViewById(R.id.progress_questionaire_progress_bar_text);
-        progressQuestionaireProgressBarText.setText(numberOfFinishedQuestionaires + "/" + numberOfQuestionaires);
-        progressQuestionaireProgressBar.setProgress(0);
+        progressQuestionnaireProgressBarText = findViewById(R.id.progress_questionnaire_progress_bar_text);
+        progressQuestionnaireProgressBarText.setText(numberOfFinishedQuestionnaires + "/" + numberOfQuestionnaires);
+        progressQuestionnaireProgressBar.setProgress(0);
     }
 
     private void updateProgressQuestionaireProgressBar() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        numberOfQuestionaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
-        numberOfFinishedQuestionaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
+        numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
+        numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
 
         //progressQuestionaireProgressBar.setMax(numberOfQuestionaires);
 
-        progressQuestionaireProgressBar.setProgress(numberOfFinishedQuestionaires);
-        progressQuestionaireProgressBarText.setText(numberOfFinishedQuestionaires + "/" + numberOfQuestionaires);
+        progressQuestionnaireProgressBar.setProgress(numberOfFinishedQuestionnaires);
+        progressQuestionnaireProgressBarText.setText(numberOfFinishedQuestionnaires + "/" + numberOfQuestionnaires);
     }
 
     private void makeProgressScreen() {
         progressManager = new ProgressManager();
         showProgressScreen();
-        showProgressQuestionaire();
+        showProgressQuestionnaire();
         showBadgeCollection();
     }
 
@@ -716,14 +718,14 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("progressFragment created and shown");
     }
 
-    private void showProgressQuestionaire() {
-        ProgressQuestionaireFragment progressQuestionaireFragment = progressManager.getProgressQuestionaireFragment();
+    private void showProgressQuestionnaire() {
+        ProgressQuestionnaireFragment progressQuestionnaireFragment = progressManager.getProgressQuestionnaireFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.progress_questionaire_container, progressQuestionaireFragment)
+                .replace(R.id.progress_questionnaire_container, progressQuestionnaireFragment)
                 .commit();
-        System.out.println("progressQuestionaireFragment created and shown");
+        System.out.println("progressQuestionnaireFragment created and shown");
     }
 
     private void showBadgeCollection() {
@@ -734,6 +736,44 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 .replace(R.id.progress_badge_collection_container, badgeCollectionFragment)
                 .commit();
         System.out.println("badgeCollectionFragment created and shown");
+    }
+
+    private void initAllQuestionnaires() {
+        questionnaireZTPB = getQuestionnaireFromFile("ZTPB.json");
+        allQuestionnaires.add(questionnaireZTPB);
+        dassQuestionnaire = getQuestionnaireFromFile("DASS_fragebogen.json");
+        allQuestionnaires.add(dassQuestionnaire);
+        rosenbergSelfEsteem = getQuestionnaireFromFile("rosenberg_self_esteem_scale.json");
+        allQuestionnaires.add(rosenbergSelfEsteem);
+        sek27 = getQuestionnaireFromFile("SEK-27_emotionale_Kompetenzen.json");
+        allQuestionnaires.add(sek27);
+        wirf = getQuestionnaireFromFile("WIRF_ressourcen.json");
+        allQuestionnaires.add(wirf);
+        emotionsanalyse = getQuestionnaireFromFile("Emotionsanalyse.json");
+        allQuestionnaires.add(emotionsanalyse);
+    }
+
+    private void setAllQuestionnairesTitles() {
+        initAllQuestionnaires();
+        allQuestionnairesTitles = new String[allQuestionnaires.size()];
+        int i = 0;
+        for (Questionnaire questionnaire : allQuestionnaires) {
+            allQuestionnairesTitles[i] = questionnaire.getTitle();
+            i++;
+        }
+    }
+
+    private void initOverviewAllQuestionnaires() {
+        if (allQuestionnairesTitles != null) {
+            initOverview(allQuestionnairesTitles);
+            System.out.println("Overview for all Questionnaires has been initialized");
+        } else {
+            System.out.println("allQuestionnairesTitles has not been initialized before. Initializing now...");
+            initAllQuestionnaires();
+            setAllQuestionnairesTitles();
+            initOverview(allQuestionnairesTitles);
+            System.out.println("Overview for all Questionnaires has been initialized");
+        }
     }
 
 
@@ -766,28 +806,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         //init progress screen
         makeProgressScreen();
 
-
-        //initOverview(relevantQuestionnairesTitles);
-
-        //lastQuestionReached is false here
-
-        //TODO: not working correctly yet
-        //if Screening questionaire was just completed (not before)
-        //var questionaire is somehow not "ZTPT", but "Emotionen" (makes no sense at all) -- hotfixed
-        /*
-        if (questionnaire == questionnaireZTPB) {
-            if (relevantQuestionnairesTitles != null) {
-                initOverview(relevantQuestionnairesTitles);
-            } else {
-                System.out.println("onProgressButtonClicked: relevantQuestionnairesTitles not initialized yet");
-            }
-        } else {
-            System.out.println("onProgressButtonClicked: current questionaire is not Screening");
-        }
-
-         */
-
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
@@ -798,16 +816,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("intro_container View removed (progressButton clicked)");
         }
 
-        /* TODO: delete later
-        if(questionnaire.getSections() != null && !firstSectionIntroAlreadyShown){
-            Section[] sections = questionnaire.getSections();
-            showIntroSection(sections[0]);
-            firstSectionIntroAlreadyShown = true;
-        }
-         */
-
-
-
         //TODO: just for testing. change later
         //displayScreening();
     }
@@ -815,8 +823,12 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     //called when menu-button ("Menü anzeigen") on progressFragment is clicked
     @Override
     public void onMenuButtonClicked() {
-        initOverview(relevantQuestionnairesTitles);
+        System.out.println("onMenuButtonClicked from MainActivity called");
 
+        //check if allQuestionnairesTitles has been initialized and do so if not
+        initOverviewAllQuestionnaires();
+
+        
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
