@@ -34,10 +34,10 @@
     </TextView>
 
     <TextView
-        android:id="@+id/progress_questionaire_progress_bar_subtext"
+        android:id="@+id/progress_questionnaire_progress_bar_subtext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/progress_questionaire_progress_bar_subtext_text"
+        android:text="@string/progress_questionnaire_progress_bar_subtext_text"
         android:textAlignment="center"
         android:textSize="20sp"
         android:layout_marginBottom="20dp"

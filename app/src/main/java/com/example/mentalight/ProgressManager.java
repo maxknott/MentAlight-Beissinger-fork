@@ -1,5 +1,7 @@
 package com.example.mentalight;
 
+import android.view.View;
+
 import com.example.mentalight.fragments.BadgeCollectionFragment;
 import com.example.mentalight.fragments.ProgressFragment;
 import com.example.mentalight.fragments.ProgressQuestionnaireFragment;
@@ -11,22 +13,23 @@ public class ProgressManager {
     private BadgeCollectionFragment badgeCollectionFragment;
     private Progress progressScreen;
 
+    private int numberOfFinishedQuestionnaires;
+    private int numberOfQuestionnaires;
+    private View progressBar;
+    private ProgressQuestionnaireFragment pqfInstance;
 
-    public ProgressManager() {
 
+    public ProgressManager(int numberOfQuestionnaires, int numberOfFinishedQuestionnaires) {
+        this.numberOfQuestionnaires = numberOfQuestionnaires;
+        this.numberOfFinishedQuestionnaires = numberOfFinishedQuestionnaires;
         init();
     }
 
 
     private void init() {
         initProgressScreen();
-        //initProgressBar();
         initProgressQuestionnaire();
         initBadgeCollection();
-    }
-
-    private void initProgressBar() {
-
     }
 
     private void initProgressScreen() {
@@ -37,23 +40,45 @@ public class ProgressManager {
     private void initProgressQuestionnaire() {
         if (progressScreen != null) {
             progressQuestionnaireFragment = new ProgressQuestionnaireFragment();
+            pqfInstance = ProgressQuestionnaireFragment.newInstance(numberOfQuestionnaires, numberOfFinishedQuestionnaires);
             System.out.println("ProgressManager: progressQuestionnaireFragment created");
         } else {
             throw new RuntimeException(this.toString()
                     + " must initiate Progress progressScreen before creating a fragment");
         }
-
     }
 
     private void initBadgeCollection() {
         if (progressScreen != null) {
             badgeCollectionFragment = new BadgeCollectionFragment();
+
+            //TODO: newInstance
             System.out.println("ProgressManager: badgeCollectionFragment created");
         } else {
             throw new RuntimeException(this.toString()
                     + " must initiate Progress progressScreen before creating a fragment");
         }
     }
+
+    //replaced by newInstance in ProgressQuestionnaireFragment
+    /*
+    public void initProgressBar() {
+        //this.numberOfQuestionnaires = numberOfQuestionnaires;
+        //this.numberOfFinishedQuestionnaires = numberOfFinishedQuestionnaires;
+        //progressQuestionnaireFragment.initProgressBar();
+
+        //pqfInstance.initProgressBar();
+    }
+
+    public void updateProgressBar() {
+        //this.numberOfQuestionnaires = numberOfQuestionnaires;
+        //this.numberOfFinishedQuestionnaires = numberOfFinishedQuestionnaires;
+        //progressQuestionnaireFragment.updateProgressBar();
+
+        //pqfInstance.updateProgressBar();
+    }
+
+     */
 
 
 
@@ -79,6 +104,17 @@ public class ProgressManager {
         } else {
             throw new RuntimeException(this.toString()
                     + " has not initiated progressQuestionnaireFragment");
+        }
+
+    }
+
+    //returns Instance of ProgressQuestionnaireFragment
+    public ProgressQuestionnaireFragment getProgressQuestionnaireFragmentInstance() {
+        if (pqfInstance != null) {
+            return pqfInstance;
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " has not initiated progressQuestionnaireFragmentInstance");
         }
 
     }

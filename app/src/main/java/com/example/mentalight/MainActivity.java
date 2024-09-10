@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,14 +74,18 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private boolean bronzeBadgeEarned = false;
     private boolean silverBadgeEarned = false;
     private boolean goldBadgeEarned = false;
-    private int numberOfFinishedQuestionnaires = 0;
     private ArrayList<String> finishedQuestionnairesTitles = new ArrayList<>();
     private ProgressBar progressQuestionnaireProgressBar;
     private TextView progressQuestionnaireProgressBarText;
     private int numberOfQuestionnaires;
+    private int numberOfFinishedQuestionnaires = 0;
     private ProgressManager progressManager;
     private ArrayList<Questionnaire> allQuestionnaires = new ArrayList<>();
     private String[] allQuestionnairesTitles;
+    private View badgeCollectionContainer;
+    private ImageView badgeCollectionBadge1;
+    private ImageView badgeCollectionBadge2;
+    private ImageView badgeCollectionBadge3;
 
     private static final int NUMBER_OF_ALL_QUESTIONNAIRES = 6;
     private static final int NUMBER_OF_ALL_BADGES = 3;
@@ -122,12 +127,15 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
             //put function here to test on startup
             // TODO: remove later
+
             /*
             hasBadge = true;
             badgeType = BADGE_TYPE_BRONZE;
             makeReward(hasBadge);
 
              */
+
+
 
 
 
@@ -328,8 +336,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
             //TODO: maybe put reward functionality here instead or put stuff above in else statement? - maybe not?
 
-            //testing if it works here
-            questionnaireCompleted();
+            //testing if it works here -- does not work! TODO: remove
+            //questionnaireCompleted();
 
 
             if(questionnaire.getSections() != null && overviewShown){
@@ -373,12 +381,15 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 //not needed here if other method works
                 //questionnaireCompleted();
 
-
+                //getRelevantQuestionnaires(relevantQuestionnairesTitles);
 
                 //normal behaviour
                 //TODO: uncomment later
                 //initOverview(relevantQuestionnairesTitles);
             }
+
+            //testing if it works here -- works!
+            questionnaireCompleted();
 
 
         } else{
@@ -438,12 +449,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private void questionnaireCompleted() {
 
         //TODO: for testing, remove later
+        /*
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         //SharedPreferences.Editor editor = sharedPreferences.edit();
         int num = sharedPreferences.getInt("numberOfFinishedQuestionnaires", 0);
         if (num != numberOfFinishedQuestionnaires) {
             System.out.println("Caution! var numberOfFinishedQuestionnaires in sharedPreferences is different from local var");
         }
+         */
+
+
+        //numberOfFinishedQuestionnaires ++;
 
         //adding current questionnaire to finishedQuestionnaires
         if (!finishedQuestionnairesTitles.contains(questionnaire.getTitle())) {
@@ -453,7 +469,14 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("questionnaire "+questionnaire.getTitle()+" has already been completed before");
         }
 
+        //to get numberOfQuestionnaires
+        initAllQuestionnaires();
+
         checkCompletedForBadge();
+    }
+
+    private void getRelevantQuestionnaires(String[] relevantQuestionnairesTitles) {
+        this.relevantQuestionnairesTitles = relevantQuestionnairesTitles;
     }
 
     //earn a badge for completing 1/6 (bronze), 3/6 (silver), and 6/6 (gold) questionnaires
@@ -741,43 +764,29 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
     }
 
-    //TODO: move progressBar stuff to ProgressManager
 
-    private void initProgressQuestionaireProgressBar() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
-        numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
 
-        progressQuestionnaireProgressBar = findViewById(R.id.progress_questionnaire_progress_bar);
+    private void makeProgressScreen(int numberOfQuestionnaires, int numberOfFinishedQuestionnaires) {
+        initAllQuestionnaires();
 
-        progressQuestionnaireProgressBar.setMax(numberOfQuestionnaires);
-
-        progressQuestionnaireProgressBarText = findViewById(R.id.progress_questionnaire_progress_bar_text);
-        progressQuestionnaireProgressBarText.setText(numberOfFinishedQuestionnaires + "/" + numberOfQuestionnaires);
-        progressQuestionnaireProgressBar.setProgress(0);
-    }
-
-    private void updateProgressQuestionaireProgressBar() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
-        numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
-
-        //progressQuestionaireProgressBar.setMax(numberOfQuestionaires);
-
-        progressQuestionnaireProgressBar.setProgress(numberOfFinishedQuestionnaires);
-        progressQuestionnaireProgressBarText.setText(numberOfFinishedQuestionnaires + "/" + numberOfQuestionnaires);
-    }
-
-    private void makeProgressScreen() {
-        progressManager = new ProgressManager();
-        showProgressScreen();
-        showProgressQuestionnaire();
-        showBadgeCollection();
-    }
-
-    private void showProgressScreen() {
+        progressManager = new ProgressManager(numberOfQuestionnaires, numberOfFinishedQuestionnaires);
         ProgressFragment progressScreenFragment = progressManager.getProgressScreenFragment();
+        //ProgressQuestionnaireFragment progressQuestionnaireFragment = progressManager.getProgressQuestionnaireFragment();
+        ProgressQuestionnaireFragment progressQuestionnaireFragmentInstance = progressManager.getProgressQuestionnaireFragmentInstance();
+        BadgeCollectionFragment badgeCollectionFragment = progressManager.getBadgeCollectionFragment();
 
+
+
+        showProgressScreen(progressScreenFragment);
+        showProgressQuestionnaire(progressQuestionnaireFragmentInstance);
+        showBadgeCollection(badgeCollectionFragment);
+
+
+        //initProgressQuestionnaireProgressBar();
+        //updateProgressQuestionnaireProgressBar();
+    }
+
+    private void showProgressScreen(ProgressFragment progressScreenFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.intro_container, progressScreenFragment)
@@ -785,9 +794,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("progressFragment created and shown");
     }
 
-    private void showProgressQuestionnaire() {
-        ProgressQuestionnaireFragment progressQuestionnaireFragment = progressManager.getProgressQuestionnaireFragment();
-
+    private void showProgressQuestionnaire(ProgressQuestionnaireFragment progressQuestionnaireFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.progress_questionnaire_container, progressQuestionnaireFragment)
@@ -795,15 +802,58 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("progressQuestionnaireFragment created and shown");
     }
 
-    private void showBadgeCollection() {
-        BadgeCollectionFragment badgeCollectionFragment = progressManager.getBadgeCollectionFragment();
-
+    private void showBadgeCollection(BadgeCollectionFragment badgeCollectionFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.progress_badge_collection_container, badgeCollectionFragment)
                 .commit();
         System.out.println("badgeCollectionFragment created and shown");
     }
+
+    private void initBadgeCollectionContent() {
+        badgeCollectionContainer = findViewById(R.id.progress_badge_collection_container);
+        badgeCollectionBadge1 = findViewById(R.id.badge_collection_badge1);
+        badgeCollectionBadge2 = findViewById(R.id.badge_collection_badge2);
+        badgeCollectionBadge3 = findViewById(R.id.badge_collection_badge3);
+    }
+
+    private void updateBadgeCollectionContent() {
+
+    }
+
+    //TODO: move progressBar stuff to ProgressManager -- or not because of SharedPrefs and View
+
+    /*
+    private void initProgressQuestionnaireProgressBar() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        //numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
+        //numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
+        numberOfQuestionnaires = NUMBER_OF_ALL_QUESTIONNAIRES;
+
+        if (progressManager != null) {
+            //progressManager.initProgressBar();
+        } else {
+            System.out.println("Error: ProgressManager has not been initialized");
+        }
+    }
+
+    private void updateProgressQuestionnaireProgressBar() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        //numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
+        //numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
+        numberOfQuestionnaires = NUMBER_OF_ALL_QUESTIONNAIRES;
+
+
+        if (progressManager != null) {
+            progressManager.updateProgressBar();
+        } else {
+            System.out.println("Error: ProgressManager has not been initialized");
+        }
+
+    }
+
+    */
 
     //check if ArrayList allQuestionnaires has all available questionnaires and add them if necessary
     private void initAllQuestionnaires() {
@@ -841,11 +891,13 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("allQuestionnaires has been correctly initialized");
         }
 
+        numberOfQuestionnaires = allQuestionnaires.size();
     }
 
     private void setAllQuestionnairesTitles() {
         initAllQuestionnaires();
-        allQuestionnairesTitles = new String[allQuestionnaires.size()];
+        numberOfQuestionnaires = allQuestionnaires.size();
+        allQuestionnairesTitles = new String[numberOfQuestionnaires];
         int i = 0;
         for (Questionnaire questionnaire : allQuestionnaires) {
             allQuestionnairesTitles[i] = questionnaire.getTitle();
@@ -894,7 +946,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("onProgressButtonClicked from MainActivity called");
 
         //init progress screen
-        makeProgressScreen();
+        makeProgressScreen(numberOfQuestionnaires, numberOfFinishedQuestionnaires);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -916,10 +968,10 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("onMenuButtonClicked from MainActivity called");
 
         //check if allQuestionnairesTitles has been initialized and do so if not
-        initOverviewAllQuestionnaires();
+        //initOverviewAllQuestionnaires();
 
         //functionality for furtherQuestionnaires
-
+        initOverview(relevantQuestionnairesTitles);
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
