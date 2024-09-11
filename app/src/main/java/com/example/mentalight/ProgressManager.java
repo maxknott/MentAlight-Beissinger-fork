@@ -17,11 +17,19 @@ public class ProgressManager {
     private int numberOfQuestionnaires;
     private View progressBar;
     private ProgressQuestionnaireFragment pqfInstance;
+    private BadgeCollectionFragment bcfInstance;
+    boolean bronzeBadgeEarned;
+    boolean silverBadgeEarned;
+    boolean goldBadgeEarned;
 
 
-    public ProgressManager(int numberOfQuestionnaires, int numberOfFinishedQuestionnaires) {
+    public ProgressManager(int numberOfQuestionnaires, int numberOfFinishedQuestionnaires,
+                           boolean bronzeBadgeEarned, boolean silverBadgeEarned, boolean goldBadgeEarned) {
         this.numberOfQuestionnaires = numberOfQuestionnaires;
         this.numberOfFinishedQuestionnaires = numberOfFinishedQuestionnaires;
+        this.bronzeBadgeEarned = bronzeBadgeEarned;
+        this.silverBadgeEarned = silverBadgeEarned;
+        this.goldBadgeEarned = goldBadgeEarned;
         init();
     }
 
@@ -40,7 +48,8 @@ public class ProgressManager {
     private void initProgressQuestionnaire() {
         if (progressScreen != null) {
             progressQuestionnaireFragment = new ProgressQuestionnaireFragment();
-            pqfInstance = ProgressQuestionnaireFragment.newInstance(numberOfQuestionnaires, numberOfFinishedQuestionnaires);
+            pqfInstance = ProgressQuestionnaireFragment.newInstance(numberOfQuestionnaires,
+                    numberOfFinishedQuestionnaires);
             System.out.println("ProgressManager: progressQuestionnaireFragment created");
         } else {
             throw new RuntimeException(this.toString()
@@ -53,6 +62,10 @@ public class ProgressManager {
             badgeCollectionFragment = new BadgeCollectionFragment();
 
             //TODO: newInstance
+
+            bcfInstance = BadgeCollectionFragment.newInstance(bronzeBadgeEarned,
+                    silverBadgeEarned, goldBadgeEarned);
+
             System.out.println("ProgressManager: badgeCollectionFragment created");
         } else {
             throw new RuntimeException(this.toString()
@@ -126,6 +139,17 @@ public class ProgressManager {
         } else {
             throw new RuntimeException(this.toString()
                     + " has not initiated badgeCollectionFragment");
+        }
+
+    }
+
+    //returns fragment as BadgeCollectionFragment-object
+    public BadgeCollectionFragment getBadgeCollectionFragmentInstance() {
+        if (bcfInstance != null) {
+            return bcfInstance;
+        } else {
+            throw new RuntimeException(this.toString()
+                    + " has not initiated badgeCollectionFragmentInstance");
         }
 
     }

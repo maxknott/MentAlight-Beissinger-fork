@@ -139,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
 
 
-
-
             //normal behaviour
             // TODO: uncomment later
             displayScreening();
@@ -325,26 +323,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     // Fortsetzungsbutton wurde geklickt
     private void continueButtonClicked() {
 
-        //TODO: if lastQuestionReached: makeReward();
-        // add functionality to show different medals for different states
         if(lastQuestionReached){
             currentQuestion = 1;
             lastQuestionReached = false;
             currentFrag = 0;
             continueButton.setText("Weiter");
 
-
-            //TODO: maybe put reward functionality here instead or put stuff above in else statement? - maybe not?
-
-            //testing if it works here -- does not work! TODO: remove
-            //questionnaireCompleted();
-
-
             if(questionnaire.getSections() != null && overviewShown){
 
                 //default behaviour:
                 //TODO: uncomment later
-                //initUIsections(questionnaire, questionnaire.getSections());
+                initUIsections(questionnaire, questionnaire.getSections());
 
                 //TODO: move if statement with initUIsections() to menuButtonClicked ?
                 System.out.println("if statement in continueButtonClicked() called: questionnaire has sections and overviewShown is true");
@@ -374,56 +363,46 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 editor.apply();
 
 
-
-                //by Max:
-                //here: just completed Screening questionnaire
-
-                //not needed here if other method works
-                //questionnaireCompleted();
-
-                //getRelevantQuestionnaires(relevantQuestionnairesTitles);
-
-                //normal behaviour
+                //default behaviour
                 //TODO: uncomment later
                 //initOverview(relevantQuestionnairesTitles);
             }
 
-            //testing if it works here -- works!
+            //By Max: functionality for rewards and badges
             questionnaireCompleted();
 
 
         } else{
 
-            //TODO: check if oneRadioButtonChecked for lasQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
+            //TODO: check if oneRadioButtonChecked for lastQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
 
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-             if(currentFragment instanceof LikertFragment){
-                              LikertFragment currentLikertFragment = (LikertFragment) currentFragment;
-                              if(!currentLikertFragment.oneRadioButtonChecked()) {
-                                  Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
-                                  goOn = false;
-                              } else {
-                                  goOn = true;
-                              }
-                          } else if(currentFragment instanceof ChipsFragment){
-                             ChipsFragment currentLikertFragment = (ChipsFragment) currentFragment;
-                              if(!currentLikertFragment.oneChipChecked()) {
-                                  Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
-                                  goOn = false;
-                              } else {
-                                  goOn = true;
-                              }
-
-                          } else if(currentFragment instanceof SingleChoiceFragment){
-                              SingleChoiceFragment currentSingleFragment = (SingleChoiceFragment) currentFragment;
-                              if(!currentSingleFragment.oneRadioButtonChecked()) {
-                                  Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
-                                  goOn = false;
-                              } else{
-                                  goOn = true;
-                              }
-                          }
+            if(currentFragment instanceof LikertFragment){
+                LikertFragment currentLikertFragment = (LikertFragment) currentFragment;
+                if(!currentLikertFragment.oneRadioButtonChecked()) {
+                    Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
+                    goOn = false;
+                } else {
+                    goOn = true;
+                }
+            } else if(currentFragment instanceof ChipsFragment){
+                ChipsFragment currentLikertFragment = (ChipsFragment) currentFragment;
+                if(!currentLikertFragment.oneChipChecked()) {
+                    Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
+                    goOn = false;
+                } else {
+                    goOn = true;
+                }
+            } else if(currentFragment instanceof SingleChoiceFragment){
+                SingleChoiceFragment currentSingleFragment = (SingleChoiceFragment) currentFragment;
+                if(!currentSingleFragment.oneRadioButtonChecked()) {
+                    Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
+                    goOn = false;
+                } else{
+                    goOn = true;
+                }
+            }
              //Wenn Antwort ausgewählt ist, weitermachen...
             if(goOn){
                 currentFrag++;
@@ -435,112 +414,12 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 if(currentQuestion == numberOfQuestions-1){
                     continueButton.setText("Abschließen");
                     lastQuestionReached = true;
-
-                    //TODO: here last question reached -1
                 }
                 currentQuestion++;
                 updateProgressBar();
             }
         }
     }
-
-
-    //TODO move down later
-    private void questionnaireCompleted() {
-
-        //TODO: for testing, remove later
-        /*
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        //SharedPreferences.Editor editor = sharedPreferences.edit();
-        int num = sharedPreferences.getInt("numberOfFinishedQuestionnaires", 0);
-        if (num != numberOfFinishedQuestionnaires) {
-            System.out.println("Caution! var numberOfFinishedQuestionnaires in sharedPreferences is different from local var");
-        }
-         */
-
-
-        //numberOfFinishedQuestionnaires ++;
-
-        //adding current questionnaire to finishedQuestionnaires
-        if (!finishedQuestionnairesTitles.contains(questionnaire.getTitle())) {
-            finishedQuestionnairesTitles.add(questionnaire.getTitle());
-            numberOfFinishedQuestionnaires = finishedQuestionnairesTitles.size();
-        } else {
-            System.out.println("questionnaire "+questionnaire.getTitle()+" has already been completed before");
-        }
-
-        //to get numberOfQuestionnaires
-        initAllQuestionnaires();
-
-        checkCompletedForBadge();
-    }
-
-    private void getRelevantQuestionnaires(String[] relevantQuestionnairesTitles) {
-        this.relevantQuestionnairesTitles = relevantQuestionnairesTitles;
-    }
-
-    //earn a badge for completing 1/6 (bronze), 3/6 (silver), and 6/6 (gold) questionnaires
-    //otherwise a RewardScreen without Badge is shown
-    private void checkCompletedForBadge() {
-
-        if (numberOfFinishedQuestionnaires == 1 ) {
-            //show RewardScreen with bronze badge for completing the first screening questionnaire (1/6)
-            earnedBadge(BADGE_TYPE_BRONZE);
-        } else if (numberOfFinishedQuestionnaires == BADGE_INTERVAL) {  // (6/3)+1 = 3
-            //show RewardScreen with silver badge for completing half of all questionnaires (3/6)
-            earnedBadge(BADGE_TYPE_SILVER);
-        } else if (numberOfFinishedQuestionnaires == NUMBER_OF_ALL_QUESTIONNAIRES) {
-            //show RewardScreen with gold badge for completing all questionnaires (6/6)
-            earnedBadge(BADGE_TYPE_GOLD);
-        } else {
-            //when any other questionnaire has been completed (not 1/6, 3/6 or 6/6)
-            //--> show RewardScreen without Badge
-            hasBadge = false;
-            makeReward(hasBadge);
-        }
-
-    }
-
-    private void earnedBadge(int type) {
-
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (type == BADGE_TYPE_BRONZE) {
-            bronzeBadgeEarned = true;
-            editor.putBoolean("bronzeBadgeEarned", bronzeBadgeEarned);
-            editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
-            editor.apply();
-            //show RewardScreen with bronze badge for completing the first screening questionnaire (1/6)
-            hasBadge = true;
-            badgeType = BADGE_TYPE_BRONZE;
-            makeReward(hasBadge);
-        } else if (type == BADGE_TYPE_SILVER) {
-            //save in sharedPreferences that RewardScreen with silver badge has been earned
-            silverBadgeEarned = true;
-            editor.putBoolean("silverBadgeEarned", silverBadgeEarned);
-            editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
-            editor.apply();
-            //show RewardScreen with silver badge for completing half of all questionnaires (3/6)
-            hasBadge = true;
-            badgeType = BADGE_TYPE_SILVER;
-            makeReward(hasBadge);
-        } else if (type == BADGE_TYPE_GOLD) {
-            //save in sharedPreferences that RewardScreen with gold badge has been earned
-            goldBadgeEarned = true;
-            editor.putBoolean("goldBadgeEarned", goldBadgeEarned);
-            editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
-            editor.apply();
-            //show RewardScreen with gold badge for completing all questionnaires (6/6)
-            hasBadge = true;
-            badgeType = BADGE_TYPE_GOLD;
-            makeReward(hasBadge);
-        } else {
-            System.out.println("Caution! earnedBadge(int type) was called with wrong BadgeType");
-        }
-
-    }
-
 
 
     // Zurückbutton geklickt, Anzeigen der vorhergehenden Frage
@@ -713,12 +592,99 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
 
 
-    //
-    // by Max:
-    //
+    ///////////////////////////////////
+    //following Code is by Max Knott://
+    ///////////////////////////////////
+
+
+
+
+    //called in continueButtonClicked()
+    private void questionnaireCompleted() {
+        //TODO: for testing, remove later
+        /*
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
+        int num = sharedPreferences.getInt("numberOfFinishedQuestionnaires", 0);
+        if (num != numberOfFinishedQuestionnaires) {
+            System.out.println("Caution! var numberOfFinishedQuestionnaires in sharedPreferences is different from local var");
+        }
+         */
+
+        //adding current questionnaire to finishedQuestionnaires
+        if (!finishedQuestionnairesTitles.contains(questionnaire.getTitle())) {
+            finishedQuestionnairesTitles.add(questionnaire.getTitle());
+            numberOfFinishedQuestionnaires = finishedQuestionnairesTitles.size();
+        } else {
+            System.out.println("questionnaire "+questionnaire.getTitle()+" has already been completed before");
+        }
+
+        //to get numberOfQuestionnaires TODO: remove later
+        initAllQuestionnaires();
+
+        checkCompletedForBadge();
+    }
+
+    //A Badge is earned for completing 1/6 (bronze), 3/6 (silver), and 6/6 (gold) questionnaires
+    //otherwise a RewardScreen without Badge is shown
+    private void checkCompletedForBadge() {
+        if (numberOfFinishedQuestionnaires == 1 ) {
+            //show RewardScreen with bronze badge for completing the first screening questionnaire (1/6)
+            earnedBadge(BADGE_TYPE_BRONZE);
+        } else if (numberOfFinishedQuestionnaires == BADGE_INTERVAL) {  // (6/3)+1 = 3
+            //show RewardScreen with silver badge for completing half of all questionnaires (3/6)
+            earnedBadge(BADGE_TYPE_SILVER);
+        } else if (numberOfFinishedQuestionnaires == NUMBER_OF_ALL_QUESTIONNAIRES) {
+            //show RewardScreen with gold badge for completing all questionnaires (6/6)
+            earnedBadge(BADGE_TYPE_GOLD);
+        } else {
+            //when any other questionnaire has been completed (not 1/6, 3/6 or 6/6)
+            //--> show RewardScreen without Badge
+            hasBadge = false;
+            makeReward(hasBadge);
+        }
+    }
+
+    //init RewardScreen with Badge that was just earned
+    private void earnedBadge(int type) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (type == BADGE_TYPE_BRONZE) {
+            bronzeBadgeEarned = true;
+            editor.putBoolean("bronzeBadgeEarned", bronzeBadgeEarned);
+            editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
+            editor.apply();
+            //show RewardScreen with bronze badge for completing the first screening questionnaire (1/6)
+            hasBadge = true;
+            badgeType = BADGE_TYPE_BRONZE;
+            makeReward(hasBadge);
+        } else if (type == BADGE_TYPE_SILVER) {
+            //save in sharedPreferences that RewardScreen with silver badge has been earned
+            silverBadgeEarned = true;
+            editor.putBoolean("silverBadgeEarned", silverBadgeEarned);
+            editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
+            editor.apply();
+            //show RewardScreen with silver badge for completing half of all questionnaires (3/6)
+            hasBadge = true;
+            badgeType = BADGE_TYPE_SILVER;
+            makeReward(hasBadge);
+        } else if (type == BADGE_TYPE_GOLD) {
+            //save in sharedPreferences that RewardScreen with gold badge has been earned
+            goldBadgeEarned = true;
+            editor.putBoolean("goldBadgeEarned", goldBadgeEarned);
+            editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
+            editor.apply();
+            //show RewardScreen with gold badge for completing all questionnaires (6/6)
+            hasBadge = true;
+            badgeType = BADGE_TYPE_GOLD;
+            makeReward(hasBadge);
+        } else {
+            System.out.println("Caution! earnedBadge(int type) was called with wrong BadgeType");
+        }
+    }
+
 
     private void makeReward(boolean hasBadge) {
-
         if (hasBadge) {
             if (badgeType == BADGE_TYPE_BRONZE) {
                 rewardManager = rewardManagerWithBadgeBronze();
@@ -737,53 +703,42 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             rewardManager = rewardManagerWithoutBadge();
             showRewardScreen(rewardManager);
         }
-
     }
 
     private void showRewardScreen(RewardManager rewardManager) {
-
         RewardFragment rewardFragment = rewardManager.getRewardFragment();
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.intro_container, rewardFragment)
                 .commit();
         System.out.println("rewardFragment created and shown");
-
     }
 
     private void showBadge(RewardManager rewardManager) {
-
         BadgeFragment badgeFragment = rewardManager.getBadgeFragment();
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.badge_container, badgeFragment)
                 .commit();
         System.out.println("badgeFragment created and shown");
-
     }
 
 
+    private void makeProgressScreen(int numberOfQuestionnaires, int numberOfFinishedQuestionnaires,
+                                    boolean bronzeBadgeEarned, boolean silverBadgeEarned, boolean goldBadgeEarned) {
 
-    private void makeProgressScreen(int numberOfQuestionnaires, int numberOfFinishedQuestionnaires) {
-        initAllQuestionnaires();
+        progressManager = new ProgressManager(numberOfQuestionnaires, numberOfFinishedQuestionnaires,
+                bronzeBadgeEarned,silverBadgeEarned, goldBadgeEarned);
 
-        progressManager = new ProgressManager(numberOfQuestionnaires, numberOfFinishedQuestionnaires);
         ProgressFragment progressScreenFragment = progressManager.getProgressScreenFragment();
         //ProgressQuestionnaireFragment progressQuestionnaireFragment = progressManager.getProgressQuestionnaireFragment();
         ProgressQuestionnaireFragment progressQuestionnaireFragmentInstance = progressManager.getProgressQuestionnaireFragmentInstance();
-        BadgeCollectionFragment badgeCollectionFragment = progressManager.getBadgeCollectionFragment();
-
-
+        //BadgeCollectionFragment badgeCollectionFragment = progressManager.getBadgeCollectionFragment();
+        BadgeCollectionFragment badgeCollectionFragmentInstance = progressManager.getBadgeCollectionFragmentInstance();
 
         showProgressScreen(progressScreenFragment);
         showProgressQuestionnaire(progressQuestionnaireFragmentInstance);
-        showBadgeCollection(badgeCollectionFragment);
-
-
-        //initProgressQuestionnaireProgressBar();
-        //updateProgressQuestionnaireProgressBar();
+        showBadgeCollection(badgeCollectionFragmentInstance);
     }
 
     private void showProgressScreen(ProgressFragment progressScreenFragment) {
@@ -810,54 +765,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("badgeCollectionFragment created and shown");
     }
 
-    private void initBadgeCollectionContent() {
-        badgeCollectionContainer = findViewById(R.id.progress_badge_collection_container);
-        badgeCollectionBadge1 = findViewById(R.id.badge_collection_badge1);
-        badgeCollectionBadge2 = findViewById(R.id.badge_collection_badge2);
-        badgeCollectionBadge3 = findViewById(R.id.badge_collection_badge3);
-    }
-
-    private void updateBadgeCollectionContent() {
-
-    }
-
-    //TODO: move progressBar stuff to ProgressManager -- or not because of SharedPrefs and View
-
-    /*
-    private void initProgressQuestionnaireProgressBar() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        //numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
-        //numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
-        numberOfQuestionnaires = NUMBER_OF_ALL_QUESTIONNAIRES;
-
-        if (progressManager != null) {
-            //progressManager.initProgressBar();
-        } else {
-            System.out.println("Error: ProgressManager has not been initialized");
-        }
-    }
-
-    private void updateProgressQuestionnaireProgressBar() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        //numberOfQuestionnaires = sharedPreferences.getInt("questionnaireTitles_size", 0);
-        //numberOfFinishedQuestionnaires = sharedPreferences.getInt("numberOfFinishedQuestionaires", 0);
-        numberOfQuestionnaires = NUMBER_OF_ALL_QUESTIONNAIRES;
-
-
-        if (progressManager != null) {
-            progressManager.updateProgressBar();
-        } else {
-            System.out.println("Error: ProgressManager has not been initialized");
-        }
-
-    }
-
-    */
-
     //check if ArrayList allQuestionnaires has all available questionnaires and add them if necessary
     private void initAllQuestionnaires() {
-
         if(allQuestionnaires.size() != NUMBER_OF_ALL_QUESTIONNAIRES) {
             questionnaireZTPB = getQuestionnaireFromFile("ZTPB.json");
             dassQuestionnaire = getQuestionnaireFromFile("DASS_fragebogen.json");
@@ -894,6 +803,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         numberOfQuestionnaires = allQuestionnaires.size();
     }
 
+    //init String array allQuestionnaireTitles
     private void setAllQuestionnairesTitles() {
         initAllQuestionnaires();
         numberOfQuestionnaires = allQuestionnaires.size();
@@ -905,6 +815,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         }
     }
 
+    //init Overview for all questionnaires or init allQuestionnairesTitles if not already initialized
+    //(not needed rn)
     private void initOverviewAllQuestionnaires() {
         if (allQuestionnairesTitles != null && allQuestionnairesTitles.length == NUMBER_OF_ALL_QUESTIONNAIRES) {
             initOverview(allQuestionnairesTitles);
@@ -917,7 +829,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("Overview for all Questionnaires has been initialized");
         }
     }
-
 
 
     //returns new RewardManager-object without badge
@@ -946,7 +857,19 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         System.out.println("onProgressButtonClicked from MainActivity called");
 
         //init progress screen
-        makeProgressScreen(numberOfQuestionnaires, numberOfFinishedQuestionnaires);
+        int num;
+        if (relevantQuestionnairesTitles != null) {
+            num = relevantQuestionnairesTitles.length + 1;  // +1 for screening questionnaire
+            makeProgressScreen(num, numberOfFinishedQuestionnaires,
+                    bronzeBadgeEarned, silverBadgeEarned, goldBadgeEarned);
+            System.out.println("onProgressButtonClicked: numberOfQuestionnaires is relevantQuestionnaires.length");
+        } else {
+            initAllQuestionnaires();
+            makeProgressScreen(numberOfQuestionnaires, numberOfFinishedQuestionnaires,
+                    bronzeBadgeEarned, silverBadgeEarned, goldBadgeEarned);
+            System.out.println("onProgressButtonClicked: numberOfQuestionnaires is allQuestionnaires.length");
+        }
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -967,7 +890,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     public void onMenuButtonClicked() {
         System.out.println("onMenuButtonClicked from MainActivity called");
 
-        //check if allQuestionnairesTitles has been initialized and do so if not
         //initOverviewAllQuestionnaires();
 
         //functionality for furtherQuestionnaires

@@ -25,17 +25,8 @@ public class ProgressQuestionnaireFragment extends Fragment {
     private static final String ARG_PARAM1 = "numberOfQuestionnaires";
     private static final String ARG_PARAM2 = "numberOfFinishedQuestionnaires";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
-
     private int numberOfFinishedQuestionnaires;
     private int numberOfQuestionnaires;
-    private ProgressBar progressBar;
-    //private View view;
-    private TextView progressBarText;
 
 
 
@@ -44,7 +35,8 @@ public class ProgressQuestionnaireFragment extends Fragment {
     }
 
 
-    public static ProgressQuestionnaireFragment newInstance(int numberOfQuestionnaires, int numberOfFinishedQuestionnaires) {
+    public static ProgressQuestionnaireFragment newInstance(int numberOfQuestionnaires,
+                                                            int numberOfFinishedQuestionnaires) {
         ProgressQuestionnaireFragment fragment = new ProgressQuestionnaireFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, numberOfQuestionnaires);
@@ -103,7 +95,6 @@ public class ProgressQuestionnaireFragment extends Fragment {
 
         String text = numberOfFinishedQuestionnaires + " / " + numberOfQuestionnaires;
 
-        //progressBarText = view.findViewById(R.id.progress_questionnaire_progress_bar_text);
         progressBarText.setText(text);
         progressBar.setProgress(numberOfFinishedQuestionnaires);
 
