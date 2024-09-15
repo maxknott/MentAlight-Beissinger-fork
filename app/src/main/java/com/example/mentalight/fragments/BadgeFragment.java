@@ -27,25 +27,8 @@ public class BadgeFragment extends Fragment {
     private static final String BADGE_TYPE_SILVER = "silver";
     private static final String BADGE_TYPE_GOLD = "gold";
 
-
-    /*
-    private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
-    private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
-    private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
-    */
-
-    /*
-    private String badgeTypeBronze = getString(BadgeType.BRONZE.num);
-    private String badgeTypeSilver = getString(BadgeType.SILVER.num);
-    private String badgeTypeGold = getString(BadgeType.GOLD.num);
-
-     */
-
     private int badgeType;
 
-    private View view;
-    private ImageView imgView;
-    private TextView txtView;
 
     public BadgeFragment() {
         // Required empty public constructor
@@ -67,8 +50,6 @@ public class BadgeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             badgeType = getArguments().getInt(BADGE_TYPE);
-            //badgeType = getArguments().getString(BADGE_TYPE);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -76,37 +57,14 @@ public class BadgeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_badge, container, false);
+        View view = inflater.inflate(R.layout.fragment_badge, container, false);
 
-        imgView = view.findViewById(R.id.imgView_medal);
-        txtView = view.findViewById(R.id.badge_name);
+        ImageView imgView = view.findViewById(R.id.imgView_medal);
+        TextView txtView = view.findViewById(R.id.badge_name);
 
 
         //medal icons from R.drawable
         // license: <a href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Pixel Buddha - Flaticon</a>
-
-        /*
-        int badgeTypeBronze = BadgeType.BRONZE.num;
-        int badgeTypeSilver = BadgeType.SILVER.num;
-        int badgeTypeGold = BadgeType.GOLD.num;
-        /*
-        if (badgeType != null) {
-
-        }
-         */
-
-        /*
-        String badgeTypeBronze = getString(BadgeType.BRONZE.num);
-        String badgeTypeSilver = getString(BadgeType.SILVER.num);
-        String badgeTypeGold = getString(BadgeType.GOLD.num);
-         */
-
-        /*
-        final int badgeTypeBronze = BadgeType.BRONZE.num;
-        final int badgeTypeSilver = BadgeType.BRONZE.num;
-        final int badgeTypeGold = BadgeType.BRONZE.num;
-        */
-
 
         String badgeTypeString = getString(badgeType);
 

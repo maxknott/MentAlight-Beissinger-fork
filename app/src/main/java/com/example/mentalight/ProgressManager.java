@@ -61,7 +61,6 @@ public class ProgressManager {
         if (progressScreen != null) {
             badgeCollectionFragment = new BadgeCollectionFragment();
 
-            //TODO: newInstance
 
             bcfInstance = BadgeCollectionFragment.newInstance(bronzeBadgeEarned,
                     silverBadgeEarned, goldBadgeEarned);
@@ -72,27 +71,6 @@ public class ProgressManager {
                     + " must initiate Progress progressScreen before creating a fragment");
         }
     }
-
-    //replaced by newInstance in ProgressQuestionnaireFragment
-    /*
-    public void initProgressBar() {
-        //this.numberOfQuestionnaires = numberOfQuestionnaires;
-        //this.numberOfFinishedQuestionnaires = numberOfFinishedQuestionnaires;
-        //progressQuestionnaireFragment.initProgressBar();
-
-        //pqfInstance.initProgressBar();
-    }
-
-    public void updateProgressBar() {
-        //this.numberOfQuestionnaires = numberOfQuestionnaires;
-        //this.numberOfFinishedQuestionnaires = numberOfFinishedQuestionnaires;
-        //progressQuestionnaireFragment.updateProgressBar();
-
-        //pqfInstance.updateProgressBar();
-    }
-
-     */
-
 
 
     //Getters:

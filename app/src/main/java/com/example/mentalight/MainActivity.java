@@ -68,25 +68,19 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private boolean hasBadge;
     private RewardManager rewardManager;
     private int badgeType;
-    private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
-    private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
-    private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
     private boolean bronzeBadgeEarned = false;
     private boolean silverBadgeEarned = false;
     private boolean goldBadgeEarned = false;
     private ArrayList<String> finishedQuestionnairesTitles = new ArrayList<>();
-    private ProgressBar progressQuestionnaireProgressBar;
-    private TextView progressQuestionnaireProgressBarText;
     private int numberOfQuestionnaires;
     private int numberOfFinishedQuestionnaires = 0;
     private ProgressManager progressManager;
     private ArrayList<Questionnaire> allQuestionnaires = new ArrayList<>();
     private String[] allQuestionnairesTitles;
-    private View badgeCollectionContainer;
-    private ImageView badgeCollectionBadge1;
-    private ImageView badgeCollectionBadge2;
-    private ImageView badgeCollectionBadge3;
 
+    private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
+    private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
+    private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
     private static final int NUMBER_OF_ALL_QUESTIONNAIRES = 6;
     private static final int NUMBER_OF_ALL_BADGES = 3;
     private static final int BADGE_INTERVAL = (NUMBER_OF_ALL_QUESTIONNAIRES / NUMBER_OF_ALL_BADGES) + 1 ; // (6/3)+1 = 3
@@ -118,16 +112,14 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
         if (!isScreeningFinished) {
 
-            //no questionnaires have been finished yet --> set numberOfFinishedQuestionnaires to 0
+            //By Max: no questionnaires have been finished yet --> set numberOfFinishedQuestionnaires to 0
             numberOfFinishedQuestionnaires = 0;
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionnaires);
             editor.apply();
 
-
-            //put function here to test on startup
-            // TODO: remove later
-
+            //By Max: call function here to test on startup
+            // TODO: just for testing, remove later
             /*
             hasBadge = true;
             badgeType = BADGE_TYPE_BRONZE;
@@ -135,12 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
              */
 
-
-
-
-
-            //normal behaviour
-            // TODO: uncomment later
+            //default behaviour:
             displayScreening();
 
 
@@ -166,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         questionnaireZTPB = getQuestionnaireFromFile("ZTPB.json");
         questions = questionnaireZTPB.getQuestions();
 
-        //by Max: var questionnaire is not correct when Screening is displayed
+        //by Max: var questionnaire was not correctly initiated when Screening is displayed, so init here
         questionnaire = questionnaireZTPB;
 
         initUI(questionnaireZTPB, questions);
@@ -320,6 +307,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         }
     }
 
+
+    //by Max: function call added here
     // Fortsetzungsbutton wurde geklickt
     private void continueButtonClicked() {
 
@@ -330,14 +319,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             continueButton.setText("Weiter");
 
             if(questionnaire.getSections() != null && overviewShown){
-
-                //default behaviour:
-                //TODO: uncomment later
                 initUIsections(questionnaire, questionnaire.getSections());
-
-                //TODO: move if statement with initUIsections() to menuButtonClicked ?
-                System.out.println("if statement in continueButtonClicked() called: questionnaire has sections and overviewShown is true");
-
             }
             // Falls man sich im Anfangsscreening befindet, Speichern und Auswerten
             if (questionnaire == questionnaireZTPB) {
@@ -363,18 +345,17 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 editor.apply();
 
 
-                //default behaviour
-                //TODO: uncomment later
+                //By Max: default behaviour removed because of new functionality
                 //initOverview(relevantQuestionnairesTitles);
             }
 
-            //By Max: functionality for rewards and badges
+            //By Max: functionality for rewards and badges added
             questionnaireCompleted();
 
 
         } else{
 
-            //TODO: check if oneRadioButtonChecked for lastQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
+            //by Max: TODO: check if oneRadioButtonChecked for lastQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
 
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
@@ -601,16 +582,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
     //called in continueButtonClicked()
     private void questionnaireCompleted() {
-        //TODO: for testing, remove later
-        /*
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        //SharedPreferences.Editor editor = sharedPreferences.edit();
-        int num = sharedPreferences.getInt("numberOfFinishedQuestionnaires", 0);
-        if (num != numberOfFinishedQuestionnaires) {
-            System.out.println("Caution! var numberOfFinishedQuestionnaires in sharedPreferences is different from local var");
-        }
-         */
-
         //adding current questionnaire to finishedQuestionnaires
         if (!finishedQuestionnairesTitles.contains(questionnaire.getTitle())) {
             finishedQuestionnairesTitles.add(questionnaire.getTitle());
@@ -619,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("questionnaire "+questionnaire.getTitle()+" has already been completed before");
         }
 
-        //to get numberOfQuestionnaires TODO: remove later
+        //to get numberOfAllQuestionnaires TODO: probably not needed, remove later
         initAllQuestionnaires();
 
         checkCompletedForBadge();
@@ -731,9 +702,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 bronzeBadgeEarned,silverBadgeEarned, goldBadgeEarned);
 
         ProgressFragment progressScreenFragment = progressManager.getProgressScreenFragment();
-        //ProgressQuestionnaireFragment progressQuestionnaireFragment = progressManager.getProgressQuestionnaireFragment();
         ProgressQuestionnaireFragment progressQuestionnaireFragmentInstance = progressManager.getProgressQuestionnaireFragmentInstance();
-        //BadgeCollectionFragment badgeCollectionFragment = progressManager.getBadgeCollectionFragment();
         BadgeCollectionFragment badgeCollectionFragmentInstance = progressManager.getBadgeCollectionFragmentInstance();
 
         showProgressScreen(progressScreenFragment);
@@ -816,7 +785,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     }
 
     //init Overview for all questionnaires or init allQuestionnairesTitles if not already initialized
-    //(not needed rn)
+    //not needed rn
     private void initOverviewAllQuestionnaires() {
         if (allQuestionnairesTitles != null && allQuestionnairesTitles.length == NUMBER_OF_ALL_QUESTIONNAIRES) {
             initOverview(allQuestionnairesTitles);
@@ -870,12 +839,11 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("onProgressButtonClicked: numberOfQuestionnaires is allQuestionnaires.length");
         }
 
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment fragment = fragmentManager.findFragmentById(R.id.intro_container);
 
-        // hide rewardFragment (and badgeFragment) by removing intro_container
+        //hide rewardFragment (and badgeFragment) by removing intro_container
         if (fragment != null) {
             transaction.remove(fragment).commit();
             System.out.println("intro_container View removed (progressButton clicked)");
@@ -890,6 +858,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     public void onMenuButtonClicked() {
         System.out.println("onMenuButtonClicked from MainActivity called");
 
+        //not needed rn
         //initOverviewAllQuestionnaires();
 
         //functionality for furtherQuestionnaires
