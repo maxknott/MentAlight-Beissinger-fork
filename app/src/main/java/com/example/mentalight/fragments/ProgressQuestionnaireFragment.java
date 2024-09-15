@@ -44,32 +44,7 @@ public class ProgressQuestionnaireFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-
-    //replaced by newInstance
-    /*
-    public void initProgressBar() {
-        //progressBar = view.findViewById(R.id.progress_questionnaire_progress_bar);
-
-        progressBar.setMax(numberOfQuestionnaires);
-
-        String text = numberOfFinishedQuestionnaires + " / " + numberOfQuestionnaires;
-
-        //progressBarText = view.findViewById(R.id.progress_questionnaire_progress_bar_text);
-        progressBarText.setText(text);
-        progressBar.setProgress(0);
-    }
-
-    public void updateProgressBar() {
-        progressBar.setMax(numberOfQuestionnaires);
-
-        String text = numberOfFinishedQuestionnaires + " / " + numberOfQuestionnaires;
-
-        progressBar.setProgress(numberOfFinishedQuestionnaires);
-        progressBarText.setText(text);
-    }
-
-     */
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
