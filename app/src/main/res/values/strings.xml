@@ -1,8 +1,31 @@
 <resources>
     <string name="app_name">MentAlight</string>
+    <string name="app_name2">MentAlight2</string>
     <string name="continue_button">Weiter</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start">Start</string>
     <string name="overview_intro_text">Die Auswertung deines Anfangsscreenings hat ergeben, dass folgende Fragebögen für dich relevant sind</string>
+
+    <!-- by Max: -->
+    <string name="progress_button_text">Fortschritt anzeigen</string>
+    <string name="reward_title_text">Geschafft</string>
+    <string name="reward_text_text">Du hast den Fragebogen erfolgreich abgeschlossen. Bleib dran!</string>
+    <string name="reward_subtitle_text">Glückwunsch!</string>
+    <string name="badge_title_text">Du hast dir eine Medaille verdient:</string>
+    <string name="badge_name_bronze">Bronze Medaille</string>
+    <string name="badge_name_silver">Silber Medaille</string>
+    <string name="badge_name_gold">Gold Medaille</string>
+    <string name="badge_type_bronze">bronze</string>
+    <string name="badge_type_silver">silver</string>
+    <string name="badge_type_gold">gold</string>
+    <string name="progress_screen_title">Mein Fortschritt</string>
+    <string name="progress_questionnaire_title_text">Fragebogen Fortschritt</string>
+    <string name="progress_badge_collection_title_text">Medaillen Sammlung</string>
+    <string name="badge_collection_title_text">Fragebogen Fortschritt</string>
+    <string name="menu_button_text">Menü anzeigen</string>
+    <string name="progress_questionnaire_progress_bar_subtext_text">Fragebogen bereits abgeschlossen</string>
+    <string name="badge_collection_subtext_text">Meine bisher gesammelten Medaillen</string>
+    <string name="badge_collection_subtext2_text">Bleib dran und bearbeite Fragebogen   um weitere Medaillen zu sammeln</string>
+
 </resources>
