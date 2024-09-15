@@ -57,7 +57,7 @@
         android:textColor="@color/dark_blue"
         android:textSize="30sp"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintTop_toBottomOf="@+id/progress_title">
     </TextView>
 
@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintTop_toBottomOf="@+id/progress_questionnaire_title"
         app:layout_constraintBottom_toTopOf="@id/progress_badge_collection_title" >
     </LinearLayout>
@@ -80,7 +80,7 @@
         android:textAlignment="center"
         android:textColor="@color/dark_blue"
         android:textSize="30sp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintTop_toBottomOf="@+id/progress_questionnaire_container">
     </TextView>
 
@@ -92,7 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintTop_toBottomOf="@+id/progress_badge_collection_title"
         app:layout_constraintBottom_toTopOf="@id/menu_button">
     </LinearLayout>
