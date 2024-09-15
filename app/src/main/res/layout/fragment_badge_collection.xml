@@ -1,14 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.BadgeCollectionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/badge_collection_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/badge_collection_subtext_text"
+        android:textAlignment="center"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/horizontal_badge_collection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/horizontal_badge_collection"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/badge_collection_badge1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:contentDescription="this is a placeholder description TODO: change to @string resource"
+            android:padding="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/gray_medal_new">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/badge_collection_badge2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/gray_medal_new" />
+
+        <ImageView
+            android:id="@+id/badge_collection_badge3"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:src="@drawable/gray_medal_new" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/badge_collection_subtitle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/badge_collection_subtext2_text"
+        android:textAlignment="center"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_badge_collection" >
+    </TextView>
+
+    <!--
+    app:layout_editor_absoluteX="10dp"
+    app:layout_editor_absoluteY="50dp"
+     -->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

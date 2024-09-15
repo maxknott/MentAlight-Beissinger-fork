@@ -20,13 +20,13 @@ public class RewardManager {
     private int badgeType;
 
 
-    //Constructor for RewardManager to create Reward without Badge
+    //Constructor for RewardManager to create RewardScreen without Badge
     public RewardManager(boolean hasBadge) {
         this.hasBadge = hasBadge;
         init();
     }
 
-    //Constructor for RewardManager to create Reward with Badge
+    //Constructor for RewardManager to create RewardScreen with Badge
     public RewardManager(boolean hasBadge, int badgeType) {
         this.hasBadge = hasBadge;
         if (hasBadge) {
@@ -66,14 +66,6 @@ public class RewardManager {
 
             rewardFragment = new RewardFragment();
 
-            /*
-            Bundle bundle = new Bundle();
-            bundle.putString("title", rewardScreen.getTitle());
-            bundle.putString("subtitle", rewardScreen.getSubtitle());
-            bundle.putString("text", rewardScreen.getText());
-            fragment.setArguments(bundle);
-             */
-
         } else {
             throw new RuntimeException(this.toString()
                     + " must initiate Reward rewardScreen before creating a fragment");
@@ -94,27 +86,6 @@ public class RewardManager {
             throw new RuntimeException(this.toString()
                     + " not a valid input");
         }
-
-        /* switch does not work even with enum so changed to if-else
-        String s = getString(badgeType);
-        switch (badgeType) {
-            case BADGE_TYPE_BRONZE:
-                badge = new Badge(BADGE_TYPE_BRONZE);
-                break;
-            case BADGE_TYPE_SILVER:
-                badge = new Badge(BADGE_TYPE_SILVER);
-                break;
-            case BADGE_TYPE_GOLD:
-                badge = new Badge(BADGE_TYPE_GOLD);
-                break;
-            default:
-                System.out.println("badgeType not accepted");
-                throw new RuntimeException(this.toString()
-                        + " not a valid input");
-        }
-         */
-        //badge = new Badge(badgeType);
-        //badge = badgeBronze();
 
     }
 

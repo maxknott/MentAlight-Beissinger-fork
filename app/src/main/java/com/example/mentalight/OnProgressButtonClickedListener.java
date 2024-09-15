@@ -1,6 +1,6 @@
 package com.example.mentalight;
 
-//Interface für progressButton clicks
+//Interface for progressButton clicks
 public interface OnProgressButtonClickedListener {
     void onProgressButtonClicked();
 }
