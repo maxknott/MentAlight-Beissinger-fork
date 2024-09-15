@@ -25,6 +25,7 @@ android {
             )
         }
         create("survey") {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
