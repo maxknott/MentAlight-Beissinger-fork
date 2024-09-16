@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private ProgressManager progressManager;
     private ArrayList<Questionnaire> allQuestionnaires = new ArrayList<>();
     private String[] allQuestionnairesTitles;
+    private boolean checked;
 
     private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
     private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         exitButton.setVisibility(View.GONE);
 
 
+        //check if Screening completed commented out because not needed for study
+        /*
         // Überprüfen, ob das Screening abgeschlossen ist
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         boolean isScreeningFinished = sharedPreferences.getBoolean("screeningFinished", false);
@@ -118,14 +121,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             editor.putInt("numberOfFinishedQuestionaires", numberOfFinishedQuestionnaires);
             editor.apply();
 
-            //By Max: call function here to test on startup
-            // TODO: just for testing, remove later
-            /*
-            hasBadge = true;
-            badgeType = BADGE_TYPE_BRONZE;
-            makeReward(hasBadge);
-
-             */
 
             //default behaviour:
             displayScreening();
@@ -141,6 +136,16 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             }
             initOverview(relevantQuestionnairesTitles);
         }
+
+         */
+
+
+        //By Max: no questionnaires have been finished yet --> set numberOfFinishedQuestionnaires to 0
+        numberOfFinishedQuestionnaires = 0;
+
+        //display screening on startup every time without checking if screening was finished before
+        displayScreening();
+
     }
 
 
@@ -308,7 +313,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     }
 
 
-    //by Max: function call added here
+    //by Max: function call added in continueButtonClicked()
+
     // Fortsetzungsbutton wurde geklickt
     private void continueButtonClicked() {
 
@@ -349,13 +355,46 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 //initOverview(relevantQuestionnairesTitles);
             }
 
-            //By Max: functionality for rewards and badges added
-            questionnaireCompleted();
+
+            //check if selected here also to fix a bug on lastQuestionReached
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if(currentFragment instanceof LikertFragment){
+                LikertFragment currentLikertFragment = (LikertFragment) currentFragment;
+                if(!currentLikertFragment.oneRadioButtonChecked()) {
+                    Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
+                    checked = false;
+                } else {
+                    checked = true;
+                }
+            } else if(currentFragment instanceof ChipsFragment){
+                ChipsFragment currentLikertFragment = (ChipsFragment) currentFragment;
+                if(!currentLikertFragment.oneChipChecked()) {
+                    Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
+                    checked = false;
+                } else {
+                    checked = true;
+                }
+            } else if(currentFragment instanceof SingleChoiceFragment){
+                SingleChoiceFragment currentSingleFragment = (SingleChoiceFragment) currentFragment;
+                if(!currentSingleFragment.oneRadioButtonChecked()) {
+                    Toast.makeText(this, "Bitte eine Antwort auswählen", Toast.LENGTH_SHORT).show();
+                    checked = false;
+                } else{
+                    checked = true;
+                }
+            }
+
+            //check if a answer was selected
+            if (checked) {
+                //By Max: functionality for rewards and badges added
+                questionnaireCompleted();
+            } else {
+                continueButton.setText("Abschließen");
+                lastQuestionReached = true;
+            }
 
 
         } else{
-
-            //by Max: TODO: check if oneRadioButtonChecked for lastQuestionReached also. Otherwise "Abschließen" Button doesn't work as intended
 
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
@@ -395,6 +434,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 if(currentQuestion == numberOfQuestions-1){
                     continueButton.setText("Abschließen");
                     lastQuestionReached = true;
+
                 }
                 currentQuestion++;
                 updateProgressBar();
@@ -417,6 +457,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         } else{
             Toast.makeText(this, "Anfang des Fragebogens erreicht!", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     // Speichern der inputs des Anfangscreenings
@@ -858,7 +899,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     public void onMenuButtonClicked() {
         System.out.println("onMenuButtonClicked from MainActivity called");
 
-        //not needed rn
+        //not needed rn, also problems with clickListener
         //initOverviewAllQuestionnaires();
 
         //functionality for furtherQuestionnaires
