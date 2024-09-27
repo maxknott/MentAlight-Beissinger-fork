@@ -17,6 +17,46 @@ Added Code by [Knott, M. (2024)] is marked by comments in english language with 
 in order to differentiate them from comments by [Beissinger, M. (2024)] which are written in german language
 
 
+## files modified by Maximilian Knott [Knott, M. (2024)]:
+
+- MainActivity.java
+- strings.xml
+
+
+## files added By Maximilian Knott [Knott, M. (2024)]:
+
+### Fragments:
+- BadgeCollectionFragment.java
+- BadgeFragment.java
+- ProgressFragment.java
+- ProgressQuestionnaireFragment.java
+- RewardFragment.java
+
+### Classes:
+- Badge.java
+- BadgeType.java
+- OnMenuButtonClickedListener.java
+- OnProgressButtonClickedListener.java
+- Progress.java
+- ProgressManager.java
+- Reward.java
+
+### Layouts:
+- fragment_badge.xml
+- fragment_badge_collection.xml
+- fragment_progress.xml
+- fragment_progress_questionaire.xml
+- fragment_reward.xml
+
+### Drawables: 
+graphics for medals by: <a href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Pixel Buddha - Flaticon</a>
+- bronze_medal.png
+- gold_medal.png
+- gray_medal_new.png
+- silver_medal.png
+
+
+
 # MentAlight
 
 ## Description
