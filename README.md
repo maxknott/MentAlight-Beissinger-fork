@@ -2,7 +2,8 @@
 
 ## Note by Maximilian Knott (https://github.com/maxknott):
 
-This GitHub repository was forked from a repository by Maria Beissinger (https://github.com/MaryKB5).
+This GitHub repository (https://github.com/maxknott/MentAlight-Beissinger-fork) was forked from 
+a repository by Maria Beissinger (https://github.com/MaryKB5).
 
 The original repository (https://github.com/MaryKB5/MentAlight) was created by Maria Beissinger,
 as part of a thesis at the University of Regensburg, Germany [Beissinger, M. (2024)].
@@ -57,7 +58,7 @@ graphics for medals by: <a href="https://www.flaticon.com/free-icons/medal" titl
 
 
 
-# MentAlight
+# MentAlight [Beissinger, M. (2024)]
 
 ## Description
 Mentalight is part of a mental health app designed to provide questionnaires to assess the mental-well-being. The app offers a variety of psychological questionnaires to address different aspects of mental health.
