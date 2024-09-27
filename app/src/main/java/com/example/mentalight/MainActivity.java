@@ -37,7 +37,10 @@ import java.util.HashMap;
 
 
 // Note by Maximilian Knott (https://github.com/maxknott):
-// This GitHub repository (https://github.com/maxknott/MentAlight-Beissinger-fork) was forked from a repository by Maria Beissinger (https://github.com/MaryKB5).
+
+
+// This GitHub repository (https://github.com/maxknott/MentAlight-Beissinger-fork) was forked from
+// a repository by Maria Beissinger (https://github.com/MaryKB5).
 
 // The original repository (https://github.com/MaryKB5/MentAlight) was created by Maria Beissinger,
 // as part of a thesis at the University of Regensburg, Germany [Beissinger, M. (2024)].
