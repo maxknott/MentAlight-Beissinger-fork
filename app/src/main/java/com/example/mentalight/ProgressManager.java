@@ -6,6 +6,13 @@ import com.example.mentalight.fragments.BadgeCollectionFragment;
 import com.example.mentalight.fragments.ProgressFragment;
 import com.example.mentalight.fragments.ProgressQuestionnaireFragment;
 
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
+
 public class ProgressManager {
 
     private ProgressFragment progressScreenFragment;

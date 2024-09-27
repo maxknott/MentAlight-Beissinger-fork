@@ -19,6 +19,14 @@ import com.example.mentalight.R;
  * Use the {@link BadgeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
+
 public class BadgeFragment extends Fragment {
 
     private static final String BADGE_TYPE = "badge_type";
@@ -63,14 +71,13 @@ public class BadgeFragment extends Fragment {
         TextView txtView = view.findViewById(R.id.badge_name);
 
 
-        //medal icons from R.drawable
-        // license: <a href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Pixel Buddha - Flaticon</a>
+        // medal icons from R.drawable
+        // graphics for medals by: <a href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Pixel Buddha - Flaticon</a>
 
         String badgeTypeString = getString(badgeType);
 
-        //set image and name for fragment
-        // hardcoded because switch does not work with my constants, even with enum (--> "constant expression required") - compile time constant
-        // TODO: change to else-if and compare ints instead
+        // set image and name for fragment
+        // hardcoded because switch does not work with constants or with enum (--> "constant expression required") - compile time constant
         switch (badgeTypeString) {
             case BADGE_TYPE_BRONZE:
                 imgView.setImageResource(R.drawable.bronze_medal);

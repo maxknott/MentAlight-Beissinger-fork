@@ -19,6 +19,14 @@ import com.example.mentalight.R;
  * Use the {@link RewardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
+
 public class RewardFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,8 +35,7 @@ public class RewardFragment extends Fragment {
 
     private String mParam1, mParam2;
 
-    //private String title, subtitle, text;
-    //private TextView titleView, subtitleView, textView;
+
     private OnProgressButtonClickedListener listener;
 
 
@@ -71,27 +78,8 @@ public class RewardFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reward, container, false);
 
-        /*
-        titleView = view.findViewById(R.id.reward_title);
-        subtitleView = view.findViewById(R.id.reward_subtitle);
-        textView = view.findViewById(R.id.reward_text);
-         */
 
-        /*
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String titleText = bundle.getString("title", "");
-            String introText = bundle.getString("intro", "");
-
-            //String textText = bundle.getString("text", "");
-            titleView.setText(titleText);
-            subtitleView.setText(introText);
-            //textView.setText(textText);
-
-        }
-         */
-
-        //view.findViewById(R.id.badge_container) ---- moved to MainActivity
+        //view.findViewById(R.id.badge_container) ----> moved to MainActivity
 
         //set background color to hide ProgressBar and BackButton
         view.setBackgroundColor(getResources().getColor(R.color.beige));

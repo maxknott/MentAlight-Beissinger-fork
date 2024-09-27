@@ -7,7 +7,7 @@
     <string name="start">Start</string>
     <string name="overview_intro_text">Die Auswertung deines Anfangsscreenings hat ergeben, dass folgende Fragebögen für dich relevant sind</string>
 
-    <!-- by Max: -->
+    <!-- Code By [Knott, M. (2024)]: -->
     <string name="progress_button_text">Fortschritt anzeigen</string>
     <string name="reward_title_text">Geschafft</string>
     <string name="reward_text_text">Du hast den Fragebogen erfolgreich abgeschlossen. Bleib dran!</string>

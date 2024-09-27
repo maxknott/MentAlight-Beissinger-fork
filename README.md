@@ -1,3 +1,22 @@
+# Mentalight forked
+
+## Note by Maximilian Knott (https://github.com/maxknott):
+
+This GitHub repository was forked from a repository by Maria Beissinger (https://github.com/MaryKB5).
+
+The original repository (https://github.com/MaryKB5/MentAlight) was created by Maria Beissinger,
+as part of a thesis at the University of Regensburg, Germany [Beissinger, M. (2024)].
+
+The forked repository was forked by Maximilian Knott as part of a thesis at the University of Regensburg, Germany [Knott, M. (2024)],
+in order to cite the original code by [Beissinger, M. (2024)].
+
+[Knott, M. (2024)] added code to the original app by [Beissinger, M. (2024)],
+as part of his thesis to add gamification functionality to the app.
+
+Added Code by [Knott, M. (2024)] is marked by comments in english language with the citation "By [Knott, M. (2024)]:",
+in order to differentiate them from comments by [Beissinger, M. (2024)] which are written in german language
+
+
 # MentAlight
 
 ## Description

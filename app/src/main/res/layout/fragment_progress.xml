@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+<!--
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+-->
+
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -83,9 +93,6 @@
         android:layout_marginTop="80dp"
         app:layout_constraintTop_toBottomOf="@+id/progress_questionnaire_container">
     </TextView>
-
-    <!-- app:layout_constraintBottom_toTopOf="@id/menu_button"
-     android:layout_marginBottom="20dp"-->
 
     <LinearLayout
         android:id="@+id/progress_badge_collection_container"

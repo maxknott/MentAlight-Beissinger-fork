@@ -17,12 +17,19 @@ import com.example.mentalight.R;
  * Use the {@link BadgeCollectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
+
 public class BadgeCollectionFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "bronzeBadgeCollected";
     private static final String ARG_PARAM2 = "silverBadgeCollected";
-
     private static final String ARG_PARAM3 = "goldBadgeCollected";
 
     private boolean bronzeBadgeCollected;
@@ -69,6 +76,7 @@ public class BadgeCollectionFragment extends Fragment {
         ImageView imgViewBadge3 = view.findViewById(R.id.badge_collection_badge3);
 
         //check for earned badges and show medal-image when true
+        //graphics for medals by: <a href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Pixel Buddha - Flaticon</a>
         if (bronzeBadgeCollected) {
             imgViewBadge1.setImageResource(R.drawable.bronze_medal);
             if (silverBadgeCollected) {

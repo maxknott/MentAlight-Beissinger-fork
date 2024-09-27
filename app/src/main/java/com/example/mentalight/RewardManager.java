@@ -3,6 +3,13 @@ package com.example.mentalight;
 import com.example.mentalight.fragments.BadgeFragment;
 import com.example.mentalight.fragments.RewardFragment;
 
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
+
 public class RewardManager {
 
     private Reward reward;

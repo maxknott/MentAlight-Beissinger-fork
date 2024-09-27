@@ -1,17 +1,24 @@
 package com.example.mentalight;
 
-//Klasse für einen Reward (Belohnung)
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
+
+//class for reward
 public class Reward {
 
     private Badge badge;
 
 
-    //Konstruktor für Reward mit Badge
+    //constructor for reward with badge
     public Reward(Badge badge) {
         this.badge = badge;
     }
 
-    //Konstruktor für Reward ohne Badge
+    //constructor for reward without badge
     public Reward() {
 
     }

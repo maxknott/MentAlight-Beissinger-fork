@@ -1,5 +1,11 @@
 package com.example.mentalight;
 
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
 public enum BadgeType {
 
     BRONZE (R.string.badge_type_bronze),

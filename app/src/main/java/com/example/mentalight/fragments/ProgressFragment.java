@@ -19,6 +19,14 @@ import com.example.mentalight.R;
  * Use the {@link ProgressFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
+/////////////////////////////////
+// Code By [Knott, M. (2024)]: //
+/////////////////////////////////
+
+
+
 public class ProgressFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match

@@ -35,6 +35,26 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+// Note by Maximilian Knott (https://github.com/maxknott):
+// This GitHub repository was forked from a repository by Maria Beissinger (https://github.com/MaryKB5).
+
+// The original repository (https://github.com/MaryKB5/MentAlight) was created by Maria Beissinger,
+// as part of a thesis at the University of Regensburg, Germany [Beissinger, M. (2024)].
+
+// The forked repository was forked by Maximilian Knott as part of a thesis at the University of Regensburg, Germany [Knott, M. (2024)],
+// in order to cite the original code by [Beissinger, M. (2024)].
+
+// [Knott, M. (2024)] added code to the original app by [Beissinger, M. (2024)],
+// as part of his thesis to add gamification functionality to the app.
+
+// Added Code by [Knott, M. (2024)] is marked by comments in english language with the citation "By [Knott, M. (2024)]:",
+// in order to differentiate them from comments by [Beissinger, M. (2024)] which are written in german language
+
+
+
+// Code by [Beissinger, M. (2024)]:
+
 public class MainActivity extends AppCompatActivity implements OnStartButtonClickListener, OnQuestionnaireClickedListener, OnProgressButtonClickedListener, OnMenuButtonClickedListener {
 
     private Questionnaire questionnaire, rosenbergSelfEsteem, dassQuestionnaire, sek27, wirf, questionnaireZTPB, emotionsanalyse;
@@ -64,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private HashMap<String, String> savedResults = new HashMap<>();
 
 
-    //by Max:
+    // vars by [Knott, M. (2024)]:
     private boolean hasBadge;
     private RewardManager rewardManager;
     private int badgeType;
@@ -78,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     private ArrayList<Questionnaire> allQuestionnaires = new ArrayList<>();
     private String[] allQuestionnairesTitles;
     private boolean checked;
-
     private static final int BADGE_TYPE_BRONZE = R.string.badge_type_bronze;
     private static final int BADGE_TYPE_SILVER = R.string.badge_type_silver;
     private static final int BADGE_TYPE_GOLD = R.string.badge_type_gold;
@@ -107,7 +126,10 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         exitButton.setVisibility(View.GONE);
 
 
-        //check if Screening completed commented out because not needed for study
+        // By [Knott, M. (2024)]:
+        // check if isScreeningFinished was commented out because not needed for study
+        // uncomment for default functionality
+
         /*
         // Überprüfen, ob das Screening abgeschlossen ist
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -140,10 +162,11 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
          */
 
 
-        //By Max: no questionnaires have been finished yet --> set numberOfFinishedQuestionnaires to 0
+        // By [Knott, M. (2024)]:
+        // no questionnaires have been finished yet --> set numberOfFinishedQuestionnaires to 0
         numberOfFinishedQuestionnaires = 0;
 
-        //display screening on startup every time without checking if screening was finished before
+        // By [Knott, M. (2024)]: display screening on startup every time without checking if screening was finished before (for study)
         displayScreening();
 
     }
@@ -158,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
         questionnaireZTPB = getQuestionnaireFromFile("ZTPB.json");
         questions = questionnaireZTPB.getQuestions();
 
-        //by Max: var questionnaire was not correctly initiated when Screening is displayed, so init here
+        // By [Knott, M. (2024)]: var questionnaire was not correctly initiated when Screening is displayed, so init here
         questionnaire = questionnaireZTPB;
 
         initUI(questionnaireZTPB, questions);
@@ -313,7 +336,8 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
     }
 
 
-    //by Max: function call added in continueButtonClicked()
+
+    // By [Knott, M. (2024)]: function call added in continueButtonClicked()
 
     // Fortsetzungsbutton wurde geklickt
     private void continueButtonClicked() {
@@ -351,12 +375,13 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 editor.apply();
 
 
-                //By Max: default behaviour removed because of new functionality
+                // By [Knott, M. (2024)]: default behaviour removed because of new functionality
                 //initOverview(relevantQuestionnairesTitles);
             }
 
 
-            //check if selected here also to fix a bug on lastQuestionReached
+            // By Knott, M.: if statement by [Beissinger, M. (2024), line 422ff] added here
+            // check if selected here also to fix a bug on lastQuestionReached
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if(currentFragment instanceof LikertFragment){
                 LikertFragment currentLikertFragment = (LikertFragment) currentFragment;
@@ -384,9 +409,9 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
                 }
             }
 
-            //check if a answer was selected
+            // By [Knott, M. (2024)]: check if an answer was selected
             if (checked) {
-                //By Max: functionality for rewards and badges added
+                // By [Knott, M. (2024)]: functionality for rewards and badges added
                 questionnaireCompleted();
             } else {
                 continueButton.setText("Abschließen");
@@ -614,9 +639,10 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
 
 
 
-    ///////////////////////////////////
-    //following Code is by Max Knott://
-    ///////////////////////////////////
+
+    /////////////////////////////////////////////////
+    // following Code added By [Knott, M. (2024)]: //
+    /////////////////////////////////////////////////
 
 
 
@@ -631,7 +657,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("questionnaire "+questionnaire.getTitle()+" has already been completed before");
         }
 
-        //to get numberOfAllQuestionnaires TODO: probably not needed, remove later
+        //to get numberOfAllQuestionnaires
         initAllQuestionnaires();
 
         checkCompletedForBadge();
@@ -671,7 +697,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             badgeType = BADGE_TYPE_BRONZE;
             makeReward(hasBadge);
         } else if (type == BADGE_TYPE_SILVER) {
-            //save in sharedPreferences that RewardScreen with silver badge has been earned
             silverBadgeEarned = true;
             editor.putBoolean("silverBadgeEarned", silverBadgeEarned);
             editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
@@ -681,7 +706,6 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             badgeType = BADGE_TYPE_SILVER;
             makeReward(hasBadge);
         } else if (type == BADGE_TYPE_GOLD) {
-            //save in sharedPreferences that RewardScreen with gold badge has been earned
             goldBadgeEarned = true;
             editor.putBoolean("goldBadgeEarned", goldBadgeEarned);
             editor.putInt("numberOfFinishedQuestionnaires", numberOfFinishedQuestionnaires);
@@ -890,7 +914,7 @@ public class MainActivity extends AppCompatActivity implements OnStartButtonClic
             System.out.println("intro_container View removed (progressButton clicked)");
         }
 
-        //TODO: just for testing. change later
+        //just for testing
         //displayScreening();
     }
 
